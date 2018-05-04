@@ -5,7 +5,7 @@ package com.paper.order.util;
  * on 2018/2/28.
  */
 
-public class ImageUrls {
+public class ImageUtil {
     public static final String[] IMAGES = new String[]{
             // Heavy images
             "http://www.sinaimg.cn/qc/photo_auto/photo/84/35/39698435/39698435_140.jpg",

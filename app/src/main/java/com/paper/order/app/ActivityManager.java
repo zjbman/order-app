@@ -50,7 +50,7 @@ public class ActivityManager {
         }
     }
 
-    public int Size(){
+    public int size(){
         return stack.size();
     }
 }

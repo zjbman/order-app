@@ -1,32 +1,47 @@
 package com.paper.order.activity;
 
+import android.app.Activity;
 import android.content.Intent;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.RelativeLayout;
 
 import com.paper.order.R;
-import com.paper.order.app.MyApplication;
+import com.paper.order.activity.base.BaseActivity;
+import com.paper.order.app.ActivityManager;
+import com.paper.order.util.LogUtil;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
 
-public class StartActivity extends AppCompatActivity {
+public class StartActivity extends BaseActivity {
 
     @Bind(R.id.start)
     RelativeLayout rl;
 
+    @Override
+    protected View setContentView() {
+        return View.inflate(this,R.layout.activity_start,null);
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_start);
-        (((MyApplication) getApplication()).activityManager).addActivity(this);
+    protected Activity bindActivity() {
+        return this;
+    }
 
-        ButterKnife.bind(this);
+    @Override
+    protected void initView() {
         startMainActivity();
+    }
+
+    @Override
+    protected void setListener() {
+
+    }
+
+    @Override
+    protected void onRelease() {
+
     }
 
     private void startMainActivity() {
@@ -41,8 +56,9 @@ public class StartActivity extends AppCompatActivity {
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                StartActivity.this.startActivity(new Intent(StartActivity.this,MainActivity.class));
-                (((MyApplication) getApplication()).activityManager).removeActivity(StartActivity.this);
+                StartActivity.this.startActivity(new Intent(StartActivity.this,LoginActivity.class));
+                ActivityManager.getInstance().removeActivity(StartActivity.this);
+                LogUtil.e(this,"当前activity数 ： " + ActivityManager.getInstance().size());
             }
 
             @Override

@@ -14,30 +14,29 @@
         android:roundIcon="@mipmap/icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.MainActivity" />
         <activity
             android:name=".activity.StartActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activity.MainActivity" />
         <activity android:name=".activity.WelcomeActivity" />
-
-        <service
-            android:name=".service.CheckNetService"
-            android:enabled="true"
-            android:exported="true" />
-
         <activity android:name=".activity.StoreDetailActivity" />
         <activity android:name=".activity.OrderSubmitActivity" />
         <activity android:name=".activity.AddressManageActivity" />
         <activity android:name=".activity.UserInfoActivity" />
         <activity android:name=".activity.LoginActivity" />
         <activity android:name=".activity.RegisterActivity" />
-        <activity android:name=".activity.ChangePassWordActivity"></activity>
+        <activity android:name=".activity.ChangePassWordActivity" />
+
+        <service
+            android:name=".service.CheckNetService"
+            android:enabled="true"
+            android:exported="true" />
+
     </application>
 
 </manifest>

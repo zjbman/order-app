@@ -16,7 +16,7 @@ import com.paper.order.R;
 import com.paper.order.activity.StoreDetailActivity;
 import com.paper.order.app.MyApplication;
 import com.paper.order.page.home.adapter.HomeDetailPageAdapter;
-import com.paper.order.util.ImageUrls;
+import com.paper.order.util.ImageUtil;
 import com.paper.order.util.ToastUtil;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
@@ -102,7 +102,7 @@ public class HomeDetailPage {
     }
 
     private void startBanner() {
-        List<String> images = Arrays.asList(ImageUrls.IMAGES);
+        List<String> images = Arrays.asList(ImageUtil.IMAGES);
         List<String> titles = new ArrayList<>();
 
         for (int i = 0;i < images.size();i++){
