@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+   <android.support.v7.widget.CardView
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:layout_margin="8dp"
+       card_view:cardCornerRadius="10dp"
+       card_view:cardElevation="10dp">
+
+   <LinearLayout
+       android:orientation="vertical"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content">
+
+   <TextView
+       android:id="@+id/tv_address"
+       android:layout_width="match_parent"
+       android:layout_height="50dp"
+       android:layout_marginLeft="8dp"
+       android:layout_marginTop="3dp"
+       android:drawableLeft="@drawable/store_address"
+       android:drawablePadding="3dp"
+       android:gravity="center_vertical"
+       android:text="广州市天河区车陂南xxx号"
+       android:textColor="#000"
+       android:textSize="18sp" />
+
+   <View
+       android:layout_marginRight="5dp"
+       android:layout_marginLeft="5dp"
+       android:layout_width="match_parent"
+       android:layout_height="1dp"
+       android:layout_marginTop="8dp"
+       android:background="#f57c00" />
+
+   <TextView
+       android:id="@+id/tv_phone"
+       android:layout_width="match_parent"
+       android:layout_height="50dp"
+       android:layout_marginLeft="8dp"
+       android:layout_marginTop="3dp"
+       android:drawableLeft="@drawable/store_phone"
+       android:drawablePadding="3dp"
+       android:gravity="center_vertical"
+       android:text="155-2197-3476"
+       android:textColor="#000"
+       android:textSize="18sp" />
+
+   </LinearLayout>
+
+   </android.support.v7.widget.CardView>
+
+   <View
+       android:layout_width="match_parent"
+       android:layout_height="1dp"
+       android:layout_marginTop="8dp"
+       android:layout_marginBottom="15dp"
+       />
+
+
+   <android.support.v7.widget.CardView
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:layout_margin="8dp"
+       card_view:cardCornerRadius="10dp"
+       card_view:cardElevation="10dp">
+
+      <LinearLayout
+          android:orientation="vertical"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content">
+
+
+   <TextView
+       android:id="@+id/tv_peisong"
+       android:layout_width="match_parent"
+       android:layout_height="50dp"
+       android:layout_marginLeft="8dp"
+       android:layout_marginTop="3dp"
+       android:drawableLeft="@drawable/store_peisong"
+       android:drawablePadding="3dp"
+       android:gravity="center_vertical"
+       android:text=" 配送服务 ： 由 商家 提供配送服务"
+       android:textColor="#000"
+       android:textSize="18sp" />
+
+   <View
+       android:layout_marginRight="5dp"
+       android:layout_marginLeft="5dp"
+       android:layout_width="match_parent"
+       android:layout_height="1dp"
+       android:layout_marginTop="8dp"
+       android:background="#f57c00" />
+
+   <TextView
+       android:id="@+id/tv_date"
+       android:layout_width="match_parent"
+       android:layout_height="50dp"
+       android:layout_marginLeft="12dp"
+       android:layout_marginTop="3dp"
+       android:drawableLeft="@drawable/store_date"
+       android:drawablePadding="3dp"
+       android:gravity="center_vertical"
+       android:text=" 配送时间 ： 09：00-22：00"
+       android:textColor="#000"
+       android:textSize="18sp" />
+
+   <View
+       android:layout_marginRight="5dp"
+       android:layout_marginLeft="5dp"
+       android:layout_width="match_parent"
+       android:layout_height="1dp"
+       android:layout_marginTop="8dp"
+       android:background="#f57c00" />
+
+   <TextView
+       android:id="@+id/tv_notice"
+       android:layout_width="match_parent"
+       android:layout_height="50dp"
+       android:layout_marginLeft="10dp"
+       android:layout_marginTop="3dp"
+       android:drawableLeft="@drawable/store_notice"
+       android:drawablePadding="3dp"
+       android:gravity="center_vertical"
+       android:text="商家公告 ： xxxxxxxxx"
+       android:textColor="#000"
+       android:textSize="18sp" />
+      </LinearLayout>
+   </android.support.v7.widget.CardView>
+</LinearLayout>

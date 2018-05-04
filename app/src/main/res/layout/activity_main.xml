@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.paper.order.activity.MainActivity">
+
+    <FrameLayout
+        android:id="@+id/framelayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1" />
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginBottom="3dp"
+        android:background="@color/textColorGray" />
+
+    <RadioGroup
+        android:id="@+id/radiogroup"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/guide_home"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:button="@null"
+            android:drawableTop="@drawable/guide_home_selector"
+            android:gravity="center"
+            android:text="首页"
+            android:textColor="@color/guide_text_color_selector"
+            android:textSize="17sp" />
+
+        <RadioButton
+            android:id="@+id/guide_order"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:button="@null"
+            android:drawableTop="@drawable/guide_order_selector"
+            android:gravity="center"
+            android:text="订单"
+            android:textColor="@color/guide_text_color_selector"
+            android:textSize="17sp" />
+
+        <RadioButton
+            android:id="@+id/guide_cart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:button="@null"
+            android:drawableTop="@drawable/guide_cart_selector"
+            android:gravity="center"
+            android:text="购物车"
+            android:textColor="@color/guide_text_color_selector"
+            android:textSize="17sp" />
+
+        <RadioButton
+            android:id="@+id/guide_wo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:button="@null"
+            android:drawableTop="@drawable/guide_wo_selector"
+            android:gravity="center"
+            android:text="我"
+            android:textColor="@color/guide_text_color_selector"
+            android:textSize="17sp" />
+
+    </RadioGroup>
+
+</LinearLayout>

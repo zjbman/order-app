@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/ll_paper_load_fail"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <TextView
+        android:drawablePadding="3dp"
+        android:drawableTop="@drawable/paper_load_fail"
+        android:textSize="18sp"
+        android:textColor="@color/textColorGray"
+        android:text="页面加载失败，请检查网络状态"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+
+</LinearLayout>
