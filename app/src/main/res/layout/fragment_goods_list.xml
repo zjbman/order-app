@@ -38,7 +38,7 @@
                 android:textSize="20sp" />
 
             <TextView
-                android:id="@+id/tv_recommend"
+                android:id="@+id/tv_details"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="商品介绍"

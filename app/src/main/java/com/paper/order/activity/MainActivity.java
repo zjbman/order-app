@@ -1,22 +1,22 @@
 package com.paper.order.activity;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.support.annotation.IdRes;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.RadioGroup;
 
 import com.paper.order.R;
-import com.paper.order.app.MyApplication;
+import com.paper.order.activity.base.BaseActivity;
 import com.paper.order.page.cart.CartPage;
 import com.paper.order.page.home.HomePage;
 import com.paper.order.page.order.OrderPage;
@@ -25,9 +25,8 @@ import com.paper.order.service.CheckNetService;
 import com.paper.order.service.ICheckNet;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     @Bind(R.id.radiogroup)
     RadioGroup radioGroup;
@@ -42,7 +41,6 @@ public class MainActivity extends AppCompatActivity {
     private View orderPageView;
     private View cartPageView;
     private View woPageView;
-
     private View paperLoading;
     private View paperLoadFailByNet;
 
@@ -51,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
 
     private final int CHECK_NET = 0;
 
+    @SuppressLint("HandlerLeak")
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -72,33 +71,27 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        (((MyApplication) getApplication()).activityManager).addActivity(this);
 
+    @Override
+    protected View setContentView() {
+        return View.inflate(this,R.layout.activity_main,null);
+    }
+
+    @Override
+    protected Activity bindActivity() {
+        return this;
+    }
+
+    @Override
+    protected void initView() {
         startCheckNetService();
         initPage();
-        initView();
-        listener();
-    }
-
-    private void initPage() {
-        homePage = new HomePage(this);
-        orderPage = new OrderPage(this);
-        cartPage = new CartPage(this);
-        woPage = new WoPage(this);
-    }
-
-    private void initView() {
-        ButterKnife.bind(this);
 
         homePageView = homePage.getView();
         orderPageView = orderPage.getView();
         cartPageView = cartPage.getView();
         woPageView = woPage.getView();
-        
+
         //当应用初始化加载时，便显示第一个页面
         radioGroup.check(R.id.guide_home);
         paperLoading = View.inflate(this, R.layout.page_loading, null);
@@ -115,7 +108,9 @@ public class MainActivity extends AppCompatActivity {
         frameLayout.addView(homePageView);
     }
 
-    private void listener() {
+
+    @Override
+    protected void setListener() {
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, @IdRes int i) {
@@ -139,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 }
-                
+
                 frameLayout.removeAllViews();
                 //当成功加载出页面的时候，才将paperLoading给remove了
                 switch (i) {
@@ -162,6 +157,14 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void initPage() {
+        homePage = new HomePage(this);
+        orderPage = new OrderPage(this);
+        cartPage = new CartPage(this);
+        woPage = new WoPage(this);
+    }
+
+
     /**
      * 启动时刻检查网络状态是否可用的服务
      */
@@ -172,18 +175,6 @@ public class MainActivity extends AppCompatActivity {
         this.startService(intent);
     }
 
-    @Override
-    protected void onDestroy() {
-        if (myServiceConn != null) {
-            this.unbindService(myServiceConn);
-            this.stopService(new Intent(this, CheckNetService.class));
-            myServiceConn = null;
-        }
-
-        ButterKnife.unbind(this);
-        (((MyApplication) getApplication()).activityManager).removeActivity(this);
-        super.onDestroy();
-    }
 
     class MyServiceConn implements ServiceConnection {
         @Override
@@ -196,5 +187,15 @@ public class MainActivity extends AppCompatActivity {
         public void onServiceDisconnected(ComponentName componentName) {
 
         }
+    }
+
+    @Override
+    protected void onRelease() {
+        if (myServiceConn != null) {
+            this.unbindService(myServiceConn);
+            this.stopService(new Intent(this, CheckNetService.class));
+            myServiceConn = null;
+        }
+
     }
 }

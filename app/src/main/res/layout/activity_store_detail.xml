@@ -28,7 +28,7 @@
             android:paddingLeft="8dp">
 
             <TextView
-                android:id="@+id/tv_store"
+                android:id="@+id/tv_business_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="店名"
@@ -36,14 +36,14 @@
                 android:textSize="22sp" />
 
 
-            <TextView
-                android:id="@+id/tv_notice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
-                android:text="店家公告"
-                android:textColor="#aa000000"
-                android:textSize="15sp" />
+            <!--<TextView-->
+                <!--android:id="@+id/tv_notice"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginTop="3dp"-->
+                <!--android:text="店家公告"-->
+                <!--android:textColor="#aa000000"-->
+                <!--android:textSize="15sp" />-->
 
         </LinearLayout>
 

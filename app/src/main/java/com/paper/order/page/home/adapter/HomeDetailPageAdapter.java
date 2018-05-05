@@ -1,5 +1,6 @@
 package com.paper.order.page.home.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -7,7 +8,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.paper.order.R;
+import com.paper.order.config.WebParam;
+import com.paper.order.data.BusinessData;
 
 import java.util.List;
 
@@ -24,11 +29,11 @@ public class HomeDetailPageAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     private OnListItemClickListener onListItemClickListener;
 
-    List<String> titles;
+    private List<BusinessData> businessDatas;
 
-    public HomeDetailPageAdapter(Context context,List<String> titles){
+    public HomeDetailPageAdapter(Context context,List<BusinessData> businessDatas){
         mContext = context;
-        this.titles = titles;
+        this.businessDatas = businessDatas;
     }
 
     public void setHeaderView(View headerView){
@@ -73,14 +78,13 @@ public class HomeDetailPageAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     @Override
     public int getItemCount() {
-        return mHeaderView == null ? titles.size() : titles.size() + 1;
+        return mHeaderView == null ? businessDatas.size() : businessDatas.size() + 1;
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder{
         private ImageView icon;
-        private TextView title;
-        private TextView detail;
-        private TextView price;
+        private TextView tv_business_name;
+        private TextView tv_business_address;
         private View itemView;
 
         public MyViewHolder(View itemView) {
@@ -91,17 +95,22 @@ public class HomeDetailPageAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             }
             this.itemView = itemView;
             icon = itemView.findViewById(R.id.iv_icon);
-            title = itemView.findViewById(R.id.tv_title);
-            detail = itemView.findViewById(R.id.tv_detail);
-            price = itemView.findViewById(R.id.tv_price);
+            tv_business_name = itemView.findViewById(R.id.tv_business_name);
+            tv_business_address = itemView.findViewById(R.id.tv_business_address);
 
         }
 
+        @SuppressLint("SetTextI18n")
         public void setData(final int position){
-            title.setText(titles.get(position));
-            icon.setBackgroundResource(R.mipmap.icon);
-            detail.setText("df");
-            price.setText("232");
+            tv_business_name.setText("店名：" + businessDatas.get(position).getBusinessName());
+            tv_business_address.setText("地址：" + businessDatas.get(position).getAddress());
+            String picUrl = WebParam.PIC_BASE_URL + businessDatas.get(position).getPicture();
+            Glide.with(mContext).load(picUrl)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .placeholder(R.mipmap.icon)//加载时的图片
+                    .error(R.mipmap.icon)  //加载错误时的图片
+                    .override(800, 800)
+                    .into(icon);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

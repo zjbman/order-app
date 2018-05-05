@@ -36,7 +36,6 @@ public class HomePage {
     private Context mContext;
     private View view;
     private List<String> titleList;
-    private List<TextView> textViews;
 
     public HomePage(Context context) {
         mContext = context;
@@ -45,10 +44,18 @@ public class HomePage {
         initMagicIndicator();
     }
 
-    public View getView() {
-        return view;
+    private void initView() {
+        view = View.inflate(mContext, R.layout.page_home, null);
+        indicator = view.findViewById(R.id.home_indicator);
+        viewpager = view.findViewById(R.id.viewpager);
+
+        initViewPagerTitle();
+
     }
 
+    /**
+     * 给当前的ViewPager设置适配器
+     */
     private void setAdapter() {
 
         viewpager.setAdapter(new PagerAdapter() {
@@ -70,7 +77,7 @@ public class HomePage {
 
             @Override
             public Object instantiateItem(ViewGroup container, int position) {
-                HomeDetailPage homeDetailPage = new HomeDetailPage(mContext);
+                HomeDetailPage homeDetailPage = new HomeDetailPage(mContext,position);
                 View view = homeDetailPage.getView();
                 container.addView(view);
                 return view;
@@ -78,25 +85,20 @@ public class HomePage {
         });
     }
 
-    private void initView() {
-        view = View.inflate(mContext, R.layout.page_home, null);
-        indicator = view.findViewById(R.id.home_indicator);
-        viewpager = view.findViewById(R.id.viewpager);
 
+    /**
+     * 初始化ViewPager的标题
+     */
+    private void initViewPagerTitle(){
         titleList = new ArrayList<>();
         titleList.add("推荐");
         titleList.add("美食");
         titleList.add("更多");
-
-
-        textViews = new ArrayList<>();
-        for (int i = 0; i < 3; i++) {
-            TextView textView = new TextView(mContext);
-            textView.setText("内容" + i);
-            textViews.add(textView);
-        }
     }
 
+    public View getView() {
+        return view;
+    }
 
     private void initMagicIndicator() {
         indicator.setBackgroundColor(Color.WHITE);

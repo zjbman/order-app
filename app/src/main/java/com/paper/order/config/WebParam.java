@@ -15,6 +15,9 @@ public class WebParam {
     /** 加薪手机WiFi*/
     public static final String BASE_URL = "http://192.168.43.142:8080/order/";
 
+    /** 图片基本地址*/
+    public static final String PIC_BASE_URL = "http://192.168.43.142:8080";
+
     public static final int success = 200;
     public static final int fail = -100;
 

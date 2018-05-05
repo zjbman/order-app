@@ -4,10 +4,10 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.paper.order.R;
+import com.paper.order.data.CommentData;
 
 import java.util.List;
 
@@ -21,12 +21,11 @@ import butterknife.ButterKnife;
 
 public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context mContext;
+    private List<CommentData> commentDatas;
 
-    List<String> titles;
-
-    public CommentAdapter(Context context, List<String> titles) {
+    public CommentAdapter(Context context, List<CommentData> commentDatas) {
         mContext = context;
-        this.titles = titles;
+        this.commentDatas = commentDatas;
     }
 
     @Override
@@ -43,18 +42,16 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Override
     public int getItemCount() {
-        return titles.size();
+        return commentDatas.size();
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-        @Bind(R.id.iv_icon)
-        ImageView iv_icon;
         @Bind(R.id.tv_username)
         TextView tv_username;
-        @Bind(R.id.tv_date)
-        TextView tv_date;
         @Bind(R.id.tv_content)
         TextView tv_content;
+        @Bind(R.id.tv_date)
+        TextView tv_date;
 
 
         public MyViewHolder(View itemView) {
@@ -63,7 +60,10 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
 
         public void setData(final int position) {
-            tv_username.setText(titles.get(position));
+            CommentData commentData = commentDatas.get(position);
+            tv_username.setText(commentData.getUserName());
+            tv_content.setText(commentData.getComment());
+            tv_date.setText(commentData.getDate());
         }
     }
 }

@@ -5,10 +5,12 @@ import java.io.Serializable;
 /**
  * 接收服务器返回数据 的类,
  * 根据返回数据的格式和数据解析方式（Json、XML等）定义
+ *
+ * 服务器返回用户登录、注册信息封装类
  * Created by Jbandxs on 2018/5/4.
  */
 
-public class ResponseByHttp implements Serializable{
+public class ResponseByUser implements Serializable{
     private int code;
     private String msg;
 
@@ -30,7 +32,7 @@ public class ResponseByHttp implements Serializable{
 
     @Override
     public String toString() {
-        return "ResponseByHttp{" +
+        return "ResponseByUser{" +
                 "code=" + code +
                 ", msg='" + msg + '\'' +
                 '}';

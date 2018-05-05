@@ -1,7 +1,7 @@
 package com.paper.order.retrofit.http;
 
 import com.paper.order.retrofit.request.GetInterface;
-import com.paper.order.retrofit.response.ResponseByHttp;
+import com.paper.order.retrofit.response.ResponseByUser;
 
 import java.util.Map;
 
@@ -17,12 +17,13 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MyRetrofit {
     private static MyRetrofit instance;
 
-    private MyRetrofit(){}
+    private MyRetrofit() {
+    }
 
-    public static MyRetrofit getInstance(){
-        if(instance == null){
-            synchronized (MyRetrofit.class){
-                if(instance == null){
+    public static MyRetrofit getInstance() {
+        if (instance == null) {
+            synchronized (MyRetrofit.class) {
+                if (instance == null) {
                     instance = new MyRetrofit();
                 }
             }
@@ -30,16 +31,13 @@ public class MyRetrofit {
         return instance;
     }
 
-    public Call<ResponseByHttp> request(String baseUrl,String api, Map<String,Object> paramMap){
+    public GetInterface request(String baseUrl) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(baseUrl) //设置网络请求的Url地址
                 .addConverterFactory(GsonConverterFactory.create()) //设置数据解析器
                 .build();
 
         // 创建 网络请求接口 的实例
-        GetInterface request = retrofit.create(GetInterface.class);
-
-        //对 发送请求 进行封装
-        return request.getManyParam(api,paramMap);
+        return retrofit.create(GetInterface.class);
     }
 }

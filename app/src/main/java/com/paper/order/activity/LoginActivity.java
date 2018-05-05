@@ -14,7 +14,8 @@ import com.paper.order.activity.base.BaseActivity;
 import com.paper.order.app.ActivityManager;
 import com.paper.order.config.WebParam;
 import com.paper.order.retrofit.http.MyRetrofit;
-import com.paper.order.retrofit.response.ResponseByHttp;
+import com.paper.order.retrofit.request.GetInterface;
+import com.paper.order.retrofit.response.ResponseByUser;
 import com.paper.order.util.MD5;
 import com.paper.order.util.SharedpreferencesUtil;
 import com.paper.order.util.StringUtil;
@@ -116,13 +117,14 @@ public class LoginActivity extends BaseActivity {
         Map<String,Object> map = new HashMap<>();
         map.put("username",username);
         map.put("password",MD5.md5(password));
-        Call<ResponseByHttp> call = MyRetrofit.getInstance().request(WebParam.BASE_URL, "Login.html", map);
+        GetInterface request = MyRetrofit.getInstance().request(WebParam.BASE_URL);
+        Call<ResponseByUser> call = request.getManyParam1("Login.html", map);
 
         // 发送网络请求(异步)
-        call.enqueue(new Callback<ResponseByHttp>() {
+        call.enqueue(new Callback<ResponseByUser>() {
             //请求成功时回调
             @Override
-            public void onResponse(Call<ResponseByHttp> call, Response<ResponseByHttp> response) {
+            public void onResponse(Call<ResponseByUser> call, Response<ResponseByUser> response) {
                 //请求处理,输出结果
                 int code = response.body().getCode();
                 handle(code);
@@ -130,7 +132,7 @@ public class LoginActivity extends BaseActivity {
 
             //请求失败时候的回调
             @Override
-            public void onFailure(Call<ResponseByHttp> call, Throwable throwable) {
+            public void onFailure(Call<ResponseByUser> call, Throwable throwable) {
                 ToastUtil.show(LoginActivity.this, "连接失败");
             }
         });

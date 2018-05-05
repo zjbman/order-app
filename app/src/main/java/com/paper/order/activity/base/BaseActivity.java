@@ -33,6 +33,7 @@ public abstract class BaseActivity extends AppCompatActivity{
     @Override
     protected void onDestroy() {
         ActivityManager.getInstance().removeActivity(bindActivity());
+        ButterKnife.unbind(bindActivity());
         onRelease();
         super.onDestroy();
     }

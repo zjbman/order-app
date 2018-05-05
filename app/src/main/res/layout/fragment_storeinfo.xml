@@ -106,7 +106,7 @@
        android:drawableLeft="@drawable/store_date"
        android:drawablePadding="3dp"
        android:gravity="center_vertical"
-       android:text=" 配送时间 ： 09：00-22：00"
+       android:text=" 配送时间 ： 09：00-23：00"
        android:textColor="#000"
        android:textSize="18sp" />
 
@@ -127,7 +127,7 @@
        android:drawableLeft="@drawable/store_notice"
        android:drawablePadding="3dp"
        android:gravity="center_vertical"
-       android:text="商家公告 ： xxxxxxxxx"
+       android:text="商家公告 ： 良心餐饮，希望大家多多支持！！"
        android:textColor="#000"
        android:textSize="18sp" />
       </LinearLayout>

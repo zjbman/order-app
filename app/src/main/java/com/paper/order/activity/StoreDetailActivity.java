@@ -11,12 +11,16 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.paper.order.R;
+import com.paper.order.app.ActivityManager;
 import com.paper.order.app.MyApplication;
 import com.paper.order.fragment.CommentFragment;
 import com.paper.order.fragment.GoodsFragment;
 import com.paper.order.fragment.StoreInfoFragment;
 import com.paper.order.page.home.indicator.ScaleTransitionPagerTitleView;
+import com.paper.order.util.ToastUtil;
 
 import net.lucode.hackware.magicindicator.MagicIndicator;
 import net.lucode.hackware.magicindicator.ViewPagerHelper;
@@ -38,10 +42,9 @@ import static com.paper.order.R.id.viewpager;
 public class StoreDetailActivity extends FragmentActivity {
     @Bind(R.id.iv_icon)
     ImageView iv_icon;
-    @Bind(R.id.tv_store)
-    TextView tv_store;
-    @Bind(R.id.tv_notice)
-    TextView tv_notice;
+    @Bind(R.id.tv_business_name)
+    TextView tv_business_name;
+
     @Bind(viewpager)
     ViewPager viewPager;
     @Bind(R.id.magicindicator)
@@ -50,11 +53,24 @@ public class StoreDetailActivity extends FragmentActivity {
     private List<String> indicators;
     private List<Fragment> fragments;
 
+    /** 当前商家的id*/
+    private int businessId;
+    private String businessName;
+    private String businessPicture;
+    private String businessAddress;
+    private String businessTelephone;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_store_detail);
-        (((MyApplication) getApplication()).activityManager).addActivity(this);
+        ActivityManager.getInstance().addActivity(this);
+
+        businessId = getIntent().getIntExtra("businessId", 1);
+        businessName = getIntent().getStringExtra("businessName");
+        businessPicture = getIntent().getStringExtra("businessPicture");
+        businessAddress = getIntent().getStringExtra("businessAddress");
+        businessTelephone = getIntent().getStringExtra("businessTelephone");
 
         initView();
         initData();
@@ -64,14 +80,33 @@ public class StoreDetailActivity extends FragmentActivity {
         setListener();
     }
 
+    private void initView() {
+        ButterKnife.bind(this);
+        tv_business_name.setText(businessName);
+        Glide.with(this).load(businessPicture)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .placeholder(R.mipmap.icon)//加载时的图片
+                .error(R.mipmap.icon)  //加载错误时的图片
+                .override(800, 800)
+                .into(iv_icon);
+    }
+
+
+    private void initData() {
+        indicators = new ArrayList<>();
+        indicators.add("点菜");
+        indicators.add("评论");
+        indicators.add("商家");
+    }
+
     private void setListener() {
     }
 
     private void initFragment() {
         fragments = new ArrayList<>();
-        fragments.add(new GoodsFragment(this));
-        fragments.add(new CommentFragment(this));
-        fragments.add(new StoreInfoFragment(this));
+        fragments.add(new GoodsFragment(this,businessId));
+        fragments.add(new CommentFragment(this,businessId));
+        fragments.add(new StoreInfoFragment(this,businessId,businessAddress,businessTelephone));
     }
 
     private void setAdapter() {
@@ -87,18 +122,6 @@ public class StoreDetailActivity extends FragmentActivity {
             }
         });
     }
-
-    private void initData() {
-        indicators = new ArrayList<>();
-        indicators.add("点菜");
-        indicators.add("评论");
-        indicators.add("商家");
-    }
-
-    private void initView() {
-        ButterKnife.bind(this);
-    }
-
 
     private void initMagicIndicator() {
         magicIndicator.setBackgroundColor(Color.WHITE);
@@ -141,7 +164,7 @@ public class StoreDetailActivity extends FragmentActivity {
 
     @Override
     protected void onDestroy() {
-        (((MyApplication) getApplication()).activityManager).removeActivity(this);
+        ActivityManager.getInstance().removeActivity(this);
         super.onDestroy();
     }
 }
