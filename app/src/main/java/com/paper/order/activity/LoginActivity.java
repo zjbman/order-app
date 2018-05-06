@@ -61,7 +61,10 @@ public class LoginActivity extends BaseActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        autoLogin();
+        boolean flag = getIntent().getBooleanExtra("exit",false);
+        if(!flag){
+            autoLogin();
+        }
     }
 
     /**
@@ -105,7 +108,9 @@ public class LoginActivity extends BaseActivity {
                     return;
                 }
 
-                requestHttp();
+                if(!StringUtil.isEmpty(username) && !StringUtil.isEmpty(password)){
+                    requestHttp();
+                }
 
                 /** 成功或失败都清空密码,避免用户连续点击登录按钮而一直请求服务器*/
                 tl_password.getEditText().setText("");
@@ -126,8 +131,11 @@ public class LoginActivity extends BaseActivity {
             @Override
             public void onResponse(Call<ResponseByUser> call, Response<ResponseByUser> response) {
                 //请求处理,输出结果
-                int code = response.body().getCode();
-                handle(code);
+                if(response.body() != null) {
+                    int code = response.body().getCode();
+                    System.out.println("code === " + code);
+                    handle(code);
+                }
             }
 
             //请求失败时候的回调

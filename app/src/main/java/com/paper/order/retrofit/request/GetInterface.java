@@ -4,6 +4,7 @@ import com.paper.order.retrofit.response.ResponseByBusiness;
 import com.paper.order.retrofit.response.ResponseByComment;
 import com.paper.order.retrofit.response.ResponseByGoods;
 import com.paper.order.retrofit.response.ResponseByUser;
+import com.paper.order.retrofit.response.ResponseByUserInfo;
 
 
 import java.util.Map;
@@ -40,4 +41,9 @@ public interface  GetInterface {
     /** 评论*/
     @GET("comment/{api}")
     Call<ResponseByComment> getComment(@Path("api")String api, @QueryMap Map<String, Object> params);
+
+    /** 评论*/
+    @GET("user/{api}")
+    Call<ResponseByUserInfo> getUser(@Path("api")String api, @QueryMap Map<String, Object> params);
+
 }

@@ -85,7 +85,7 @@ public class GoodsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             GoodsData goodsData = goodsDatas.get(position);
             tv_good_name.setText(goodsData.getGoodsName());
             tv_details.setText(goodsData.getDetail());
-            tv_price.setText(goodsData.getPrice());
+            tv_price.setText(goodsData.getPrice() + "");
 
             Glide.with(mContext).load(WebParam.PIC_BASE_URL + goodsData.getPicture())
                     .diskCacheStrategy(DiskCacheStrategy.ALL)

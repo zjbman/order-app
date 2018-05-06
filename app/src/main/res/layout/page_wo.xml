@@ -62,7 +62,7 @@
                 android:layout_below="@+id/tv_name"
                 android:layout_marginTop="3dp"
                 android:layout_toRightOf="@+id/tv_balance"
-                android:text="20"
+                android:text=""
                 android:textColor="#44000000"
                 android:textSize="14sp" />
 
@@ -72,6 +72,56 @@
         </android.support.v7.widget.CardView>
 
 
+    <!--<android.support.v7.widget.CardView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_margin="8dp"-->
+        <!--card_view:cardCornerRadius="10dp"-->
+        <!--card_view:cardElevation="10dp">-->
+
+    <!--<LinearLayout-->
+        <!--android:orientation="vertical"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content">-->
+
+        <!--<TextView-->
+            <!--android:id="@+id/tv_get"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="35dp"-->
+            <!--android:layout_marginLeft="8dp"-->
+            <!--android:layout_marginTop="3dp"-->
+            <!--android:drawableLeft="@drawable/get"-->
+            <!--android:drawablePadding="3dp"-->
+            <!--android:gravity="center_vertical"-->
+            <!--android:text="提现"-->
+            <!--android:textColor="#000"-->
+            <!--android:textSize="18sp" />-->
+
+        <!--<View-->
+            <!--android:layout_marginRight="8dp"-->
+            <!--android:layout_marginLeft="8dp"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="1dp"-->
+            <!--android:layout_marginTop="4dp"-->
+            <!--android:background="#f57c00" />-->
+
+        <!--<TextView-->
+            <!--android:id="@+id/tv_recharge"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="35dp"-->
+            <!--android:layout_marginLeft="8dp"-->
+            <!--android:layout_marginTop="3dp"-->
+            <!--android:drawableLeft="@drawable/recharge"-->
+            <!--android:drawablePadding="3dp"-->
+            <!--android:gravity="center_vertical"-->
+            <!--android:text="充值"-->
+            <!--android:textColor="#000"-->
+            <!--android:textSize="18sp" />-->
+
+
+        <!--</LinearLayout>-->
+        <!--</android.support.v7.widget.CardView>-->
+
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -84,68 +134,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/tv_get"
-            android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="3dp"
-            android:drawableLeft="@drawable/get"
-            android:drawablePadding="3dp"
-            android:gravity="center_vertical"
-            android:text="提现"
-            android:textColor="#000"
-            android:textSize="18sp" />
-
-        <View
-            android:layout_marginRight="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="4dp"
-            android:background="#f57c00" />
-
-        <TextView
-            android:id="@+id/tv_recharge"
-            android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="3dp"
-            android:drawableLeft="@drawable/recharge"
-            android:drawablePadding="3dp"
-            android:gravity="center_vertical"
-            android:text="充值"
-            android:textColor="#000"
-            android:textSize="18sp" />
-
-
-        </LinearLayout>
-        </android.support.v7.widget.CardView>
-
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        card_view:cardCornerRadius="10dp"
-        card_view:cardElevation="10dp">
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:id="@+id/tv_address"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="3dp"
-            android:drawableLeft="@drawable/address"
-            android:drawablePadding="3dp"
-            android:gravity="center_vertical"
-            android:text="地址管理"
-            android:textColor="#000"
-            android:textSize="18sp" />
+        <!--<TextView-->
+            <!--android:id="@+id/tv_address"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="40dp"-->
+            <!--android:layout_marginLeft="8dp"-->
+            <!--android:layout_marginTop="3dp"-->
+            <!--android:drawableLeft="@drawable/address"-->
+            <!--android:drawablePadding="3dp"-->
+            <!--android:gravity="center_vertical"-->
+            <!--android:text="地址管理"-->
+            <!--android:textColor="#000"-->
+            <!--android:textSize="18sp" />-->
 
         <View
             android:layout_marginRight="8dp"
@@ -189,6 +189,14 @@
             android:text="修改密码"
             android:textColor="#000"
             android:textSize="18sp" />
+
+        <View
+            android:layout_marginRight="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="4dp"
+            android:background="#f57c00" />
 
         </LinearLayout>
         </android.support.v7.widget.CardView>

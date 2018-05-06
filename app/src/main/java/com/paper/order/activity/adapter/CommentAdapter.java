@@ -30,6 +30,9 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        if(commentDatas == null || commentDatas.size() < 1){
+            return new MyViewHolder1(View.inflate(mContext, R.layout.fragment_comment_null, null));
+        }
         return new MyViewHolder(View.inflate(mContext, R.layout.fragment_comment_list, null));
     }
 
@@ -43,6 +46,12 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public int getItemCount() {
         return commentDatas.size();
+    }
+
+    class MyViewHolder1 extends RecyclerView.ViewHolder {
+        public MyViewHolder1(View itemView) {
+            super(itemView);
+        }
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {

@@ -19,6 +19,7 @@ import com.paper.order.retrofit.http.MyRetrofit;
 import com.paper.order.retrofit.request.GetInterface;
 import com.paper.order.retrofit.response.ResponseByUser;
 import com.paper.order.util.MD5;
+import com.paper.order.util.SharedpreferencesUtil;
 import com.paper.order.util.StringUtil;
 import com.paper.order.util.ToastUtil;
 
@@ -148,8 +149,10 @@ public class RegisterActivity extends BaseActivity {
             @Override
             public void onResponse(Call<ResponseByUser> call, Response<ResponseByUser> response) {
                 //请求处理,输出结果
-                int code = response.body().getCode();
-                handle(code);
+                if(response.body() != null) {
+                    int code = response.body().getCode();
+                    handle(code);
+                }
             }
 
             //请求失败时候的回调
@@ -185,8 +188,12 @@ public class RegisterActivity extends BaseActivity {
     }
 
     private void startLoginActivity() {
-        startActivity(new Intent(this,LoginActivity.class));
+        Intent intent = new Intent(this, LoginActivity.class);
+        intent.putExtra("exit",true);
+        startActivity(intent);
         ActivityManager.getInstance().removeActivity(this);
+         /* 清除账号缓存*/
+        SharedpreferencesUtil.getInstance().cacheUser(this,"","");
     }
 
     /**

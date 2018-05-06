@@ -90,11 +90,13 @@ public class GoodsFragment extends Fragment {
         GetInterface request = MyRetrofit.getInstance().request(WebParam.BASE_URL);
         Map<String, Object> map = new HashMap<>();
         map.put("id", businessId);
-        Call<ResponseByGoods> call = request.getGoods("List.html", map);
+        Call<ResponseByGoods> call = request.getGoods("Get.html", map);
         call.enqueue(new Callback<ResponseByGoods>() {
             @Override
             public void onResponse(Call<ResponseByGoods> call, Response<ResponseByGoods> response) {
-                parse(response.body());
+                if(response.body() != null) {
+                    parse(response.body());
+                }
             }
 
             @Override

@@ -95,7 +95,9 @@ public class CommentFragment  extends Fragment {
         call.enqueue(new Callback<ResponseByComment>() {
             @Override
             public void onResponse(Call<ResponseByComment> call, Response<ResponseByComment> response) {
-                parse(response.body());
+                if(response.body() != null) {
+                    parse(response.body());
+                }
             }
 
             @Override

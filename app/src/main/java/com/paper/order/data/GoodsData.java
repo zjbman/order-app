@@ -10,7 +10,7 @@ public class GoodsData {
     private int id;
     private String goodsName;
     private String detail;
-    private String price;
+    private Double price;
     private String picture;
     private int businessId;
     private String businessName;
@@ -49,11 +49,11 @@ public class GoodsData {
         this.detail = detail;
     }
 
-    public String getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 

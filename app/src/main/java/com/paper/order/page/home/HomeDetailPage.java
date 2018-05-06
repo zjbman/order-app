@@ -139,7 +139,9 @@ public class HomeDetailPage {
         call.enqueue(new Callback<ResponseByBusiness>() {
             @Override
             public void onResponse(Call<ResponseByBusiness> call, Response<ResponseByBusiness> response) {
-                parse(response.body());
+                if(response.body() != null) {
+                    parse(response.body());
+                }
             }
 
             @Override

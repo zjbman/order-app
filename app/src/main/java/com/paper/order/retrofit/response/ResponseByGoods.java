@@ -31,7 +31,7 @@ public class ResponseByGoods {
         private int id;
         private String goodsName;
         private String details;
-        private String price;
+        private Double price;
         private String picture;
         private String businessName;
         private int businessId;
@@ -61,11 +61,11 @@ public class ResponseByGoods {
             this.details = details;
         }
 
-        public String getPrice() {
+        public Double getPrice() {
             return price;
         }
 
-        public void setPrice(String price) {
+        public void setPrice(Double price) {
             this.price = price;
         }
 
