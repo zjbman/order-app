@@ -59,7 +59,7 @@ public class LoginActivity extends BaseActivity {
         toolbar.setTitle("欢迎登录");
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);// 给左上角图标的左边加上一个返回的图标
 
         boolean flag = getIntent().getBooleanExtra("exit",false);
         if(!flag){

@@ -74,7 +74,7 @@ public class RegisterActivity extends BaseActivity {
         toolbar.setTitle("欢迎注册");
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);// 给左上角图标的左边加上一个返回的图标
     }
 
     @Override

@@ -42,8 +42,11 @@ public interface  GetInterface {
     @GET("comment/{api}")
     Call<ResponseByComment> getComment(@Path("api")String api, @QueryMap Map<String, Object> params);
 
-    /** 评论*/
+    /** 获取评论*/
     @GET("user/{api}")
     Call<ResponseByUserInfo> getUser(@Path("api")String api, @QueryMap Map<String, Object> params);
 
+    /** 新增评论*/
+    @GET("comment/{api}")
+    Call<ResponseByUser> insertComment(@Path("api")String api, @QueryMap Map<String, Object> params);
 }
