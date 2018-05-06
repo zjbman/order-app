@@ -1,4 +1,4 @@
-package com.paper.order.activity.adapter;
+package com.paper.order.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -27,8 +27,6 @@ import butterknife.ButterKnife;
 
 public class GoodsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context mContext;
-    private OnRecyclerViewItemClickListener onRecyclerViewItemClickListener;
-
     private List<GoodsData> goodsDatas;
 
     public GoodsAdapter(Context context,List<GoodsData> goodsDatas){
@@ -82,7 +80,7 @@ public class GoodsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }
 
         public void setData(final int position){
-            GoodsData goodsData = goodsDatas.get(position);
+            final GoodsData goodsData = goodsDatas.get(position);
             tv_good_name.setText(goodsData.getGoodsName());
             tv_details.setText(goodsData.getDetail());
             tv_price.setText(goodsData.getPrice() + "");
@@ -96,22 +94,45 @@ public class GoodsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
             tv_number.setText("0");
 
-            ll_goods.setOnClickListener(new View.OnClickListener() {
+            /* 减号*/
+            btn_decrease.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(onRecyclerViewItemClickListener != null){
-                        onRecyclerViewItemClickListener.onItemClick(position,itemView);
+                    if(onBtnDecreaseClickListener != null){
+                        onBtnDecreaseClickListener.onClick(position,tv_number,goodsData.getPrice());
+                    }
+                }
+            });
+
+             /* 加号*/
+            btn_add.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(onBtnAddClickListener != null){
+                        onBtnDecreaseClickListener.onClick(position,tv_number,goodsData.getPrice());
                     }
                 }
             });
         }
     }
 
-    public interface OnRecyclerViewItemClickListener{
-        void onItemClick(int position,View itemView);
+
+    private OnBtnDecreaseClickListener onBtnDecreaseClickListener;
+    private OnBtnAddClickListener onBtnAddClickListener;
+
+    public interface OnBtnDecreaseClickListener{
+        void onClick(int position,TextView tv_number,Double price);
     }
 
-    public void setOnRecyclerViewItemClickListener(OnRecyclerViewItemClickListener onRecyclerViewItemClickListener){
-        this.onRecyclerViewItemClickListener = onRecyclerViewItemClickListener;
+    public interface OnBtnAddClickListener{
+        void onClick(int position,TextView tv_number,Double price);
+    }
+
+    public void setOnBtnDecreaseClickListener(OnBtnDecreaseClickListener onBtnDecreaseClickListener){
+        this.onBtnDecreaseClickListener = onBtnDecreaseClickListener;
+    }
+
+    public void setOnBtnAddClickListener(OnBtnAddClickListener onBtnAddClickListener){
+        this.onBtnAddClickListener = onBtnAddClickListener;
     }
 }

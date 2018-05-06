@@ -1,4 +1,4 @@
-package com.paper.order.activity.adapter;
+package com.paper.order.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

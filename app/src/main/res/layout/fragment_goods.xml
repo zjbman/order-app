@@ -25,7 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
-            android:text="共选择了 ："
+            android:text="选择了 ："
             android:textColor="#000"
             android:textSize="15sp" />
 
@@ -66,13 +66,13 @@
             android:textSize="18sp" />
 
         <Button
-            android:id="@+id/btn_compute"
-            android:layout_width="100dp"
+            android:id="@+id/btn_add_cart"
+            android:layout_width="140dp"
             android:layout_height="match_parent"
             android:layout_marginLeft="8dp"
             android:background="#ee5001"
             android:gravity="center"
-            android:text="去结算"
+            android:text="添加到购物车"
             android:textColor="#fff"
             android:textSize="20sp" />
 

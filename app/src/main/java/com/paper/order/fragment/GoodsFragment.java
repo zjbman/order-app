@@ -18,7 +18,7 @@ import android.widget.TextView;
 
 import com.paper.order.R;
 import com.paper.order.activity.OrderSubmitActivity;
-import com.paper.order.activity.adapter.GoodsAdapter;
+import com.paper.order.adapter.GoodsAdapter;
 import com.paper.order.config.WebParam;
 import com.paper.order.data.GoodsData;
 import com.paper.order.retrofit.http.MyRetrofit;
@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -55,12 +56,13 @@ public class GoodsFragment extends Fragment {
     TextView tv_goods_number;
     @Bind(R.id.tv_accounts)
     TextView tv_accounts;
-    @Bind(R.id.btn_compute)
+    @Bind(R.id.btn_add_cart)
     Button btn_compute;
 
     private GoodsAdapter adapter;
-
+    private Map<Integer,Double> totalMap = new HashMap<>();
     private final int REQUEST_SECCESS = 1;
+    private final int NUMBER_CHANGE = 2;
 
     @SuppressLint("HandlerLeak")
     private Handler handler = new Handler() {
@@ -70,6 +72,25 @@ public class GoodsFragment extends Fragment {
             switch (msg.what) {
                 case REQUEST_SECCESS:
                     setAdapter();
+                    break;
+
+                case NUMBER_CHANGE:
+                    Map<Integer,Double> map = (Map<Integer,Double>) msg.obj;
+                    /* 每次传递过来的map集合中有且只有一对*/
+                    Set<Integer> keySet = map.keySet();
+                    int position = keySet.iterator().next();
+
+                    /* 不管是原来商品基本上的增加还是减少，或者是添加新的商品，都需要往该集合中覆盖(新增)*/
+                    totalMap.put(position,map.get(position));
+
+                    Double totalPrice = 0.0;
+                    Set<Integer> set = totalMap.keySet();
+                    for(Integer p : set){
+                        totalPrice = totalPrice + totalMap.get(p);
+                    }
+
+                    tv_accounts.setText(totalPrice + "");
+                    tv_goods_number.setText(set.size());
                     break;
                 default:
                     break;
@@ -148,10 +169,44 @@ public class GoodsFragment extends Fragment {
         });
 
         if(adapter != null) {
-            adapter.setOnRecyclerViewItemClickListener(new GoodsAdapter.OnRecyclerViewItemClickListener() {
+            adapter.setOnBtnAddClickListener(new GoodsAdapter.OnBtnAddClickListener() {
                 @Override
-                public void onItemClick(int position, View itemView) {
-                    ToastUtil.show(mContext, "" + position);
+                public void onClick(int position, TextView tv_number,Double price) {
+                    String numberStr = tv_number.getText().toString();
+                    int number = Integer.parseInt(numberStr);
+                    tv_number.setText((number + 1) + "");
+
+                    Map<Integer,Double> map = new HashMap<>();
+                    map.put(position,price * (number + 1));
+                    Message message = Message.obtain();
+                    message.what = NUMBER_CHANGE;
+                    message.obj = map;
+                    handler.sendMessage(message);
+                }
+            });
+
+            adapter.setOnBtnDecreaseClickListener(new GoodsAdapter.OnBtnDecreaseClickListener() {
+                @Override
+                public void onClick(int position, TextView tv_number,Double price) {
+                    String numberStr = tv_number.getText().toString();
+                    int number = Integer.parseInt(numberStr);
+
+                    Map<Integer,Double> map = new HashMap<>();
+                    Message message = Message.obtain();
+                    message.what = NUMBER_CHANGE;
+                    if(number <= 0){
+                        tv_number.setText("0");
+
+                        map.put(position,0.0);
+                        message.obj = map;
+                        handler.sendMessage(message);
+                    }else{
+                        tv_number.setText((number - 1) + "");
+
+                        map.put(position,price * (number - 1));
+                        message.obj = map;
+                        handler.sendMessage(message);
+                    }
                 }
             });
         }

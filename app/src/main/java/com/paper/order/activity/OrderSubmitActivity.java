@@ -6,7 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.paper.order.R;
-import com.paper.order.activity.adapter.OrderSubmitAdapter;
+import com.paper.order.adapter.OrderSubmitAdapter;
 import com.paper.order.app.MyApplication;
 
 import java.util.ArrayList;
