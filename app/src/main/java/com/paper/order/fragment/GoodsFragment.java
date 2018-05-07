@@ -2,13 +2,10 @@ package com.paper.order.fragment;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,16 +15,22 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.paper.order.R;
-import com.paper.order.activity.OrderSubmitActivity;
 import com.paper.order.adapter.GoodsAdapter;
 import com.paper.order.config.WebParam;
 import com.paper.order.data.GoodsData;
+import com.paper.order.data.GoodsList;
 import com.paper.order.retrofit.http.MyRetrofit;
 import com.paper.order.retrofit.request.GetInterface;
 import com.paper.order.retrofit.response.ResponseByGoods;
 import com.paper.order.retrofit.response.ResponseByUsually;
+import com.paper.order.util.SharedpreferencesUtil;
 import com.paper.order.util.ToastUtil;
+
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -63,10 +66,14 @@ public class GoodsFragment extends Fragment {
     Button btn_add_cart;
 
     private GoodsAdapter adapter;
-    /** 这是记录当前总共选择了多少样商品及总价钱的map*/
+    /**
+     * 这是记录当前总共选择了多少样商品及总价钱的map
+     */
     private Map<Integer, Double> totalMap = new HashMap<>();
-    /** 这是记录当前每一个item有多少数量的map*/
-    private Map<Integer,Integer> numberMap = new HashMap<>();
+    /**
+     * 这是记录当前每一个item有多少数量的map
+     */
+    private Map<Integer, Integer> numberMap = new HashMap<>();
     private final int REQUEST_SECCESS = 1;
     private final int NUMBER_CHANGE = 2;
 
@@ -89,11 +96,11 @@ public class GoodsFragment extends Fragment {
 
                     /* 如果对应的value为0，则说明没有选择该商品，那么就要移除该key-value*/
                     Double vaule = (map.get(position));
-                    if(vaule <= 0){
+                    if (vaule <= 0) {
                         //移除
                         totalMap.remove(position);
 
-                    }else{
+                    } else {
                         //添加
                         /* 不管是原来商品基本上的增加还是减少，或者是添加新的商品，都需要往该集合中覆盖(新增)*/
                         totalMap.put(position, map.get(position));
@@ -173,7 +180,7 @@ public class GoodsFragment extends Fragment {
     private void setAdapter() {
         if (goodsDatas != null && goodsDatas.size() > 0) {
             recyclerView.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
-            adapter = new GoodsAdapter(mContext, goodsDatas,numberMap);
+            adapter = new GoodsAdapter(mContext, goodsDatas, numberMap);
             recyclerView.setAdapter(adapter);
         }
     }
@@ -182,7 +189,13 @@ public class GoodsFragment extends Fragment {
         btn_add_cart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                requestHttpForAddCart();
+                Set<Integer> keys = numberMap.keySet();
+                if (keys == null || keys.size() <= 0) {
+                    ToastUtil.show(mContext, "未选择任何商品！");
+                    return;
+                }
+
+                requestHttpForAddCart(keys);
             }
         });
 
@@ -191,12 +204,12 @@ public class GoodsFragment extends Fragment {
                 @Override
                 public void onClick(int position, TextView tv_number, Double price) {
                     boolean containsKey = numberMap.containsKey(position);
-                    if(!containsKey){
+                    if (!containsKey) {
                         /* 如果numberMap中没有包含该key，则说明一定是第一次点击，value为1*/
-                        numberMap.put(position,1);
-                    }else{
+                        numberMap.put(position, 1);
+                    } else {
                         /* 包含了该key，则value累加*/
-                        numberMap.put(position,numberMap.get(position) + 1);
+                        numberMap.put(position, numberMap.get(position) + 1);
                     }
 
                     /* 调用方法，通知适配器相关数据已经发生了改变*/
@@ -219,15 +232,15 @@ public class GoodsFragment extends Fragment {
                 @Override
                 public void onClick(int position, TextView tv_number, Double price) {
                     boolean containsKey = numberMap.containsKey(position);
-                    if(!containsKey){
+                    if (!containsKey) {
                         /* 如果numberMap中没有包含该key，则说明一定是第一次点击，*/
 //                        numberMap.put(position,0);//增加了这句，会出现负数
-                    }else{
+                    } else {
                         /* 包含了该key，则value累减*/
-                        numberMap.put(position,numberMap.get(position) - 1);
+                        numberMap.put(position, numberMap.get(position) - 1);
 
                         /* 当value减至0的时候，则移除该key-value*/
-                        if(numberMap.get(position) <= 0){
+                        if (numberMap.get(position) <= 0) {
                             numberMap.remove(position);
                         }
                     }
@@ -260,29 +273,56 @@ public class GoodsFragment extends Fragment {
 
     }
 
-    /** 请求服务器 加入购物车*/
-    private void requestHttpForAddCart() {
+    /**
+     * 请求服务器 加入购物车
+     */
+    private void requestHttpForAddCart(Set<Integer> keys) {
         GetInterface request = MyRetrofit.getInstance().request(WebParam.BASE_URL);
-        Map<String,Object> map = new HashMap<>();
-        map.put("username",1);
-        map.put("businessId",1);
-        map.put("goodsId",1);
-        map.put("goodsNumber",1);
-        Call<ResponseByUsually> call = request.addCart("Save.html", map);
+        Map<String, Object> map = new HashMap<>();
+        Map<String, String> user = SharedpreferencesUtil.getInstance().getUser(mContext);
+        String username = user.get("username");
+
+        List<Map<String, Object>> list = new ArrayList<>();
+        for (Integer key : keys) {
+            Map<String, Object> goodsMap = new HashMap<>();
+            GoodsData goodsData = goodsDatas.get(key);
+            Integer goodsId = goodsData.getId();
+            Integer goodsNumber = numberMap.get(key);
+            goodsMap.put("goodsId", goodsId);
+            goodsMap.put("goodsNumber", goodsNumber);
+            list.add(goodsMap);
+        }
+
+        GoodsList goodsList = new GoodsList();
+        goodsList.setGoodsList(list);
+
+        /* 封装成json字符串传递过去！！！！！！，不然不管是get还是post都接收不了对象*/
+        Gson gson = new Gson();
+        String s = gson.toJson(goodsList);
+
+        map.put("username", username);
+        map.put("businessId", businessId);
+        map.put("goodsList", s);
+
+        Call<ResponseByUsually> call = request.addCartPost(map);
         call.enqueue(new Callback<ResponseByUsually>() {
             @Override
             public void onResponse(Call<ResponseByUsually> call, Response<ResponseByUsually> response) {
-                int code = response.body().getCode();
-                if(code == 200){
-                    ToastUtil.show(mContext,"成功添加购物车! 快去购物车查看吧");
-                }else if(code == -100){
-                    ToastUtil.show(mContext,"添加购物车失败!");
+                if(response.body() == null){
+                    ToastUtil.show(mContext, "添加购物车失败! body == null");
+                }else {
+                    int code = response.body().getCode();
+                    if (code == 200) {
+                        ToastUtil.show(mContext, "成功添加购物车! 快去购物车查看吧");
+                    } else if (code == -100) {
+                        ToastUtil.show(mContext, "添加购物车失败! code == -100");
+                    }
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseByUsually> call, Throwable t) {
-                ToastUtil.show(mContext,"添加购物车 连接服务器失败!");
+                ToastUtil.show(mContext, "添加购物车 连接服务器失败!");
             }
         });
     }

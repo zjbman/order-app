@@ -41,7 +41,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
-            android:text=" 个"
+            android:text=" 种"
             android:textColor="#000"
             android:textSize="15sp" />
 

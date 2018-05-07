@@ -133,7 +133,6 @@ public class LoginActivity extends BaseActivity {
                 //请求处理,输出结果
                 if(response.body() != null) {
                     int code = response.body().getCode();
-                    System.out.println("code === " + code);
                     handle(code);
                 }
             }

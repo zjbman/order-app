@@ -15,9 +15,10 @@
         android:orientation="horizontal">
 
         <ImageView
+            android:layout_margin="10dp"
             android:id="@+id/iv_icon"
-            android:layout_width="70dp"
-            android:layout_height="70dp" />
+            android:layout_width="65dp"
+            android:layout_height="65dp" />
 
         <LinearLayout
             android:layout_width="wrap_content"

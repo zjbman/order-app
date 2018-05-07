@@ -229,11 +229,11 @@ public class CommentFragment extends Fragment {
 
     private void setAdapter() {
 
-        if (commentDatas != null && commentDatas.size() > 0) {
-            recyclerView.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
-            adapter = new CommentAdapter(mContext, commentDatas);
-            recyclerView.setAdapter(adapter);
-        }
+//        if (commentDatas != null && commentDatas.size() > 0) {
+        recyclerView.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
+        adapter = new CommentAdapter(mContext, commentDatas);
+        recyclerView.setAdapter(adapter);
+//        }
     }
 
 

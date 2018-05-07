@@ -10,6 +10,7 @@ public class BusinessData {
     private String businessName;
     private String picture;
     private String address;
+    private String telephone;
 
     public int getId() {
         return id;
@@ -43,6 +44,14 @@ public class BusinessData {
         this.address = address;
     }
 
+    public String getTelephone() {
+        return telephone;
+    }
+
+    public void setTelephone(String telephone) {
+        this.telephone = telephone;
+    }
+
     @Override
     public String toString() {
         return "BusinessData{" +
@@ -50,6 +59,7 @@ public class BusinessData {
                 ", businessName='" + businessName + '\'' +
                 ", picture='" + picture + '\'' +
                 ", address='" + address + '\'' +
+                ", telephone='" + telephone + '\'' +
                 '}';
     }
 }

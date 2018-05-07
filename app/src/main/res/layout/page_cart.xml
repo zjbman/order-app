@@ -34,20 +34,46 @@
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
-        <CheckBox
-            android:id="@+id/cb_all_select"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:button="@null"
-            android:drawableLeft="@drawable/check_selector"
-            android:drawablePadding="5dp"
-            android:enabled="true"
+        <!--<CheckBox-->
+            <!--android:id="@+id/cb_all_select"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginLeft="8dp"-->
+            <!--android:layout_marginRight="8dp"-->
+            <!--android:button="@null"-->
+            <!--android:drawableLeft="@drawable/check_selector"-->
+            <!--android:drawablePadding="5dp"-->
+            <!--android:enabled="true"-->
+            <!--android:gravity="center_vertical"-->
+            <!--android:text="全选"-->
+            <!--android:textColor="#000"-->
+            <!--android:textSize="15sp" />-->
+
+        <TextView
+            android:layout_marginLeft="15dp"
             android:gravity="center_vertical"
-            android:text="全选"
-            android:textColor="#000"
-            android:textSize="15sp" />
+            android:textSize="13sp"
+            android:textColor="#44000000"
+            android:text="共选择了："
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/tv_goods_number"
+            android:gravity="center_vertical"
+            android:textSize="15sp"
+            android:textColor="#44000000"
+            android:text="0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:gravity="center_vertical"
+            android:textSize="13sp"
+            android:textColor="#44000000"
+            android:text=" 种"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
         <View
             android:layout_width="wrap_content"
@@ -65,7 +91,7 @@
             android:id="@+id/tv_accounts"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="20"
+            android:text="0"
             android:textColor="@color/textColorRed"
             android:textSize="18sp" />
 

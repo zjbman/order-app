@@ -1,6 +1,7 @@
 package com.paper.order.retrofit.request;
 
 import com.paper.order.retrofit.response.ResponseByBusiness;
+import com.paper.order.retrofit.response.ResponseByCart;
 import com.paper.order.retrofit.response.ResponseByComment;
 import com.paper.order.retrofit.response.ResponseByGoods;
 import com.paper.order.retrofit.response.ResponseByUsually;
@@ -10,7 +11,10 @@ import com.paper.order.retrofit.response.ResponseByUserInfo;
 import java.util.Map;
 
 import retrofit2.Call;
+import retrofit2.http.FieldMap;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
@@ -53,4 +57,19 @@ public interface  GetInterface {
     /** 添加购物车*/
     @GET("cart/{api}")
     Call<ResponseByUsually> addCart(@Path("api")String api, @QueryMap Map<String, Object> params);
+
+    /** 购物车*/
+    @GET("cart/{api}")
+    Call<ResponseByCart> getCart(@Path("api")String api, @QueryMap Map<String, Object> params);
+
+    /** 添加购物车 post*/
+    @FormUrlEncoded
+    @POST("cart/{api}")
+    Call<ResponseByUsually> addCartPost1(@Path("api")String api, @FieldMap Map<String, Object> params);
+
+    /** 添加购物车 post*/
+    @FormUrlEncoded
+    @POST("cart/Save.html")
+    Call<ResponseByUsually> addCartPost(@FieldMap Map<String, Object> params);
+
 }

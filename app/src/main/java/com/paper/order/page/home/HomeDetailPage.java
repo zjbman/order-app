@@ -134,7 +134,7 @@ public class HomeDetailPage {
         call.enqueue(new Callback<ResponseByBusiness>() {
             @Override
             public void onResponse(Call<ResponseByBusiness> call, Response<ResponseByBusiness> response) {
-                if(response.body() != null) {
+                if (response.body() != null) {
                     parse(response.body());
                 }
             }
@@ -162,6 +162,7 @@ public class HomeDetailPage {
             businessData.setBusinessName(msg.getBusinessName());
             businessData.setPicture(msg.getPicture());
             businessData.setAddress(msg.getAddress());
+            businessData.setTelephone(msg.getTelephone());
             businessDatas.add(businessData);
         }
 
@@ -204,9 +205,22 @@ public class HomeDetailPage {
         if (homeDetailPageAdapter != null) {
             homeDetailPageAdapter.setOnListItemClickListener(new HomeDetailPageAdapter.OnListItemClickListener() {
                 @Override
-                public void onListItemClick(View view, int position) {
-                    ToastUtil.show(mContext, "list : " + position);
-//                    startStoreDetailActivity(position,"","","","");
+                public void onListItemClick(View view, int index) {
+                    BusinessData businessData = businessDatas.get(index);
+
+                    if (position == 0) {
+                        //当前为 “推荐”
+                        startStoreDetailActivity(index + 1, businessData.getBusinessName(), WebParam.PIC_BASE_URL + businessData.getPicture(), businessData.getAddress(), businessData.getTelephone());
+
+                    } else if (position == 1) {
+                        //当前为 “美食”
+                        startStoreDetailActivity(index + 8, businessData.getBusinessName(), WebParam.PIC_BASE_URL + businessData.getPicture(), businessData.getAddress(), businessData.getTelephone());
+
+                    } else if (position == 2) {
+                        //当前为 “更多”
+                        startStoreDetailActivity(index + 15, businessData.getBusinessName(), WebParam.PIC_BASE_URL + businessData.getPicture(), businessData.getAddress(), businessData.getTelephone());
+
+                    }
                 }
             });
         }
@@ -223,13 +237,13 @@ public class HomeDetailPage {
             public void OnBannerClick(int position) {
                 switch (position) {
                     case 0:
-                        startStoreDetailActivity(8,"新品味",WebParam.PIC_BASE_URL + "/pic/8.jpg","嘉应学院嘉园路","18846554886");
+                        startStoreDetailActivity(8, "新品味", WebParam.PIC_BASE_URL + "/pic/8.jpg", "嘉应学院嘉园路", "18846554886");
                         break;
                     case 1:
-                        startStoreDetailActivity(3,"重庆鸡公煲",WebParam.PIC_BASE_URL + "/pic/3.jpg","嘉应学院嘉园路","15121354897");
+                        startStoreDetailActivity(3, "重庆鸡公煲", WebParam.PIC_BASE_URL + "/pic/3.jpg", "嘉应学院嘉园路", "15121354897");
                         break;
                     case 2:
-                        startStoreDetailActivity(15,"家常便饭",WebParam.PIC_BASE_URL + "/pic/15.jpg","嘉应学院西门","18855446225");
+                        startStoreDetailActivity(15, "家常便饭", WebParam.PIC_BASE_URL + "/pic/15.jpg", "嘉应学院西门", "18855446225");
                         break;
                     default:
                         break;
@@ -238,14 +252,14 @@ public class HomeDetailPage {
         });
     }
 
-    private void startStoreDetailActivity(int businessId,String businessName,String businessPicture,
-                                    String businessAddress,String businessTelephone) {
+    private void startStoreDetailActivity(int businessId, String businessName, String businessPicture,
+                                          String businessAddress, String businessTelephone) {
         Intent intent = new Intent(mContext, StoreDetailActivity.class);
-        intent.putExtra("businessId",businessId);
-        intent.putExtra("businessName",businessName);
-        intent.putExtra("businessPicture",businessPicture);
-        intent.putExtra("businessAddress",businessAddress);
-        intent.putExtra("businessTelephone",businessTelephone);
+        intent.putExtra("businessId", businessId);
+        intent.putExtra("businessName", businessName);
+        intent.putExtra("businessPicture", businessPicture);
+        intent.putExtra("businessAddress", businessAddress);
+        intent.putExtra("businessTelephone", businessTelephone);
         mContext.startActivity(intent);
     }
 
