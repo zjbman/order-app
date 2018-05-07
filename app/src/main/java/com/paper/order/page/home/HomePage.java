@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -32,6 +33,7 @@ public class HomePage {
 
     private MagicIndicator indicator;
     private ViewPager viewpager;
+    private Toolbar toolbar;
 
     private Context mContext;
     private View view;
@@ -48,6 +50,11 @@ public class HomePage {
         view = View.inflate(mContext, R.layout.page_home, null);
         indicator = view.findViewById(R.id.home_indicator);
         viewpager = view.findViewById(R.id.viewpager);
+        toolbar = view.findViewById(R.id.toolbar);
+
+         /* 设定布局中的toolbar*/
+        toolbar.setTitle("点菜系统");
+        toolbar.setTitleTextColor(mContext.getResources().getColor(R.color.white));
 
         initViewPagerTitle();
 
@@ -77,7 +84,7 @@ public class HomePage {
 
             @Override
             public Object instantiateItem(ViewGroup container, int position) {
-                HomeDetailPage homeDetailPage = new HomeDetailPage(mContext,position);
+                HomeDetailPage homeDetailPage = new HomeDetailPage(mContext, position);
                 View view = homeDetailPage.getView();
                 container.addView(view);
                 return view;
@@ -89,7 +96,7 @@ public class HomePage {
     /**
      * 初始化ViewPager的标题
      */
-    private void initViewPagerTitle(){
+    private void initViewPagerTitle() {
         titleList = new ArrayList<>();
         titleList.add("推荐");
         titleList.add("美食");

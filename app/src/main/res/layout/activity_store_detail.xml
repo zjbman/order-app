@@ -9,7 +9,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="70dp"
         android:background="@color/textColorRed"
         android:gravity="center_vertical"
         android:orientation="horizontal">
@@ -17,12 +17,12 @@
         <ImageView
             android:id="@+id/iv_icon"
             android:layout_width="70dp"
-            android:layout_height="70dp"
-             />
+            android:layout_height="70dp" />
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:gravity="center_vertical"
             android:orientation="vertical"
             android:paddingLeft="8dp">
@@ -37,28 +37,38 @@
 
 
             <!--<TextView-->
-                <!--android:id="@+id/tv_notice"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_marginTop="3dp"-->
-                <!--android:text="店家公告"-->
-                <!--android:textColor="#aa000000"-->
-                <!--android:textSize="15sp" />-->
+            <!--android:id="@+id/tv_notice"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginTop="3dp"-->
+            <!--android:text="店家公告"-->
+            <!--android:textColor="#aa000000"-->
+            <!--android:textSize="15sp" />-->
 
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_exit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="20dp"
+            android:text="返回"
+            android:textColor="#fff"
+            android:textSize="18sp" />
 
     </LinearLayout>
 
 
-            <net.lucode.hackware.magicindicator.MagicIndicator
-                android:id="@+id/magicindicator"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginTop="3dp" />
+    <net.lucode.hackware.magicindicator.MagicIndicator
+        android:id="@+id/magicindicator"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="3dp" />
 
-            <android.support.v4.view.ViewPager
-                android:id="@+id/viewpager"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </LinearLayout>

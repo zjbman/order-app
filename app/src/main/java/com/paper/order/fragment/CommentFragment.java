@@ -23,7 +23,7 @@ import com.paper.order.data.CommentData;
 import com.paper.order.retrofit.http.MyRetrofit;
 import com.paper.order.retrofit.request.GetInterface;
 import com.paper.order.retrofit.response.ResponseByComment;
-import com.paper.order.retrofit.response.ResponseByUser;
+import com.paper.order.retrofit.response.ResponseByUsually;
 import com.paper.order.util.SharedpreferencesUtil;
 import com.paper.order.util.StringUtil;
 import com.paper.order.util.ToastUtil;
@@ -162,10 +162,10 @@ public class CommentFragment extends Fragment {
         map.put("id", businessId);
         map.put("username", username);
         map.put("content", comment);
-        Call<ResponseByUser> call = request.insertComment("Insert.html", map);
-        call.enqueue(new Callback<ResponseByUser>() {
+        Call<ResponseByUsually> call = request.insertComment("Insert.html", map);
+        call.enqueue(new Callback<ResponseByUsually>() {
             @Override
-            public void onResponse(Call<ResponseByUser> call, Response<ResponseByUser> response) {
+            public void onResponse(Call<ResponseByUsually> call, Response<ResponseByUsually> response) {
                 int code = response.body().getCode();
                 if (code == -100) {
                     ToastUtil.show(mContext, "评论失败");
@@ -177,7 +177,7 @@ public class CommentFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<ResponseByUser> call, Throwable t) {
+            public void onFailure(Call<ResponseByUsually> call, Throwable t) {
                 ToastUtil.show(mContext, "链接失败");
             }
         });

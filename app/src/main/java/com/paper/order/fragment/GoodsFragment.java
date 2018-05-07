@@ -3,10 +3,12 @@ package com.paper.order.fragment;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -24,6 +26,7 @@ import com.paper.order.data.GoodsData;
 import com.paper.order.retrofit.http.MyRetrofit;
 import com.paper.order.retrofit.request.GetInterface;
 import com.paper.order.retrofit.response.ResponseByGoods;
+import com.paper.order.retrofit.response.ResponseByUsually;
 import com.paper.order.util.ToastUtil;
 
 import java.util.ArrayList;
@@ -57,10 +60,13 @@ public class GoodsFragment extends Fragment {
     @Bind(R.id.tv_accounts)
     TextView tv_accounts;
     @Bind(R.id.btn_add_cart)
-    Button btn_compute;
+    Button btn_add_cart;
 
     private GoodsAdapter adapter;
-    private Map<Integer,Double> totalMap = new HashMap<>();
+    /** 这是记录当前总共选择了多少样商品及总价钱的map*/
+    private Map<Integer, Double> totalMap = new HashMap<>();
+    /** 这是记录当前每一个item有多少数量的map*/
+    private Map<Integer,Integer> numberMap = new HashMap<>();
     private final int REQUEST_SECCESS = 1;
     private final int NUMBER_CHANGE = 2;
 
@@ -72,25 +78,37 @@ public class GoodsFragment extends Fragment {
             switch (msg.what) {
                 case REQUEST_SECCESS:
                     setAdapter();
+                    setListener();
                     break;
 
                 case NUMBER_CHANGE:
-                    Map<Integer,Double> map = (Map<Integer,Double>) msg.obj;
+                    Map<Integer, Double> map = (Map<Integer, Double>) msg.obj;
                     /* 每次传递过来的map集合中有且只有一对*/
                     Set<Integer> keySet = map.keySet();
                     int position = keySet.iterator().next();
 
-                    /* 不管是原来商品基本上的增加还是减少，或者是添加新的商品，都需要往该集合中覆盖(新增)*/
-                    totalMap.put(position,map.get(position));
+                    /* 如果对应的value为0，则说明没有选择该商品，那么就要移除该key-value*/
+                    Double vaule = (map.get(position));
+                    if(vaule <= 0){
+                        //移除
+                        totalMap.remove(position);
+
+                    }else{
+                        //添加
+                        /* 不管是原来商品基本上的增加还是减少，或者是添加新的商品，都需要往该集合中覆盖(新增)*/
+                        totalMap.put(position, map.get(position));
+                    }
 
                     Double totalPrice = 0.0;
                     Set<Integer> set = totalMap.keySet();
-                    for(Integer p : set){
-                        totalPrice = totalPrice + totalMap.get(p);
-                    }
+                    if (set != null) {
+                        for (Integer p : set) {
+                            totalPrice = totalPrice + totalMap.get(p);
+                        }
 
-                    tv_accounts.setText(totalPrice + "");
-                    tv_goods_number.setText(set.size());
+                        tv_accounts.setText(totalPrice + "");
+                        tv_goods_number.setText(set.size() + "");
+                    }
                     break;
                 default:
                     break;
@@ -104,6 +122,21 @@ public class GoodsFragment extends Fragment {
         this.businessId = businessId;
     }
 
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        view = inflater.inflate(R.layout.fragment_goods, null);
+        ButterKnife.bind(this, view);
+        requestHttp();
+        return view;
+    }
+
     /**
      * 请求服务器，根据商家id获取相应信息
      */
@@ -115,7 +148,7 @@ public class GoodsFragment extends Fragment {
         call.enqueue(new Callback<ResponseByGoods>() {
             @Override
             public void onResponse(Call<ResponseByGoods> call, Response<ResponseByGoods> response) {
-                if(response.body() != null) {
+                if (response.body() != null) {
                     parse(response.body());
                 }
             }
@@ -137,47 +170,44 @@ public class GoodsFragment extends Fragment {
         handler.sendEmptyMessage(REQUEST_SECCESS);
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_goods, null);
-        ButterKnife.bind(this, view);
-        requestHttp();
-        setListener();
-        return view;
-    }
-
     private void setAdapter() {
-        if(goodsDatas != null && goodsDatas.size() > 0) {
+        if (goodsDatas != null && goodsDatas.size() > 0) {
             recyclerView.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
-            adapter = new GoodsAdapter(mContext, goodsDatas);
+            adapter = new GoodsAdapter(mContext, goodsDatas,numberMap);
             recyclerView.setAdapter(adapter);
         }
     }
 
     private void setListener() {
-        btn_compute.setOnClickListener(new View.OnClickListener() {
+        btn_add_cart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mContext.startActivity(new Intent(mContext, OrderSubmitActivity.class));
+                requestHttpForAddCart();
             }
         });
 
-        if(adapter != null) {
+        if (adapter != null) {
             adapter.setOnBtnAddClickListener(new GoodsAdapter.OnBtnAddClickListener() {
                 @Override
-                public void onClick(int position, TextView tv_number,Double price) {
+                public void onClick(int position, TextView tv_number, Double price) {
+                    boolean containsKey = numberMap.containsKey(position);
+                    if(!containsKey){
+                        /* 如果numberMap中没有包含该key，则说明一定是第一次点击，value为1*/
+                        numberMap.put(position,1);
+                    }else{
+                        /* 包含了该key，则value累加*/
+                        numberMap.put(position,numberMap.get(position) + 1);
+                    }
+
+                    /* 调用方法，通知适配器相关数据已经发生了改变*/
+                    adapter.notify(numberMap);
+
                     String numberStr = tv_number.getText().toString();
                     int number = Integer.parseInt(numberStr);
                     tv_number.setText((number + 1) + "");
 
-                    Map<Integer,Double> map = new HashMap<>();
-                    map.put(position,price * (number + 1));
+                    Map<Integer, Double> map = new HashMap<>();
+                    map.put(position, price * (number + 1));
                     Message message = Message.obtain();
                     message.what = NUMBER_CHANGE;
                     message.obj = map;
@@ -187,29 +217,74 @@ public class GoodsFragment extends Fragment {
 
             adapter.setOnBtnDecreaseClickListener(new GoodsAdapter.OnBtnDecreaseClickListener() {
                 @Override
-                public void onClick(int position, TextView tv_number,Double price) {
+                public void onClick(int position, TextView tv_number, Double price) {
+                    boolean containsKey = numberMap.containsKey(position);
+                    if(!containsKey){
+                        /* 如果numberMap中没有包含该key，则说明一定是第一次点击，*/
+//                        numberMap.put(position,0);//增加了这句，会出现负数
+                    }else{
+                        /* 包含了该key，则value累减*/
+                        numberMap.put(position,numberMap.get(position) - 1);
+
+                        /* 当value减至0的时候，则移除该key-value*/
+                        if(numberMap.get(position) <= 0){
+                            numberMap.remove(position);
+                        }
+                    }
+
+                    /* 调用方法，通知适配器相关数据已经发生了改变*/
+                    adapter.notify(numberMap);
+
                     String numberStr = tv_number.getText().toString();
                     int number = Integer.parseInt(numberStr);
 
-                    Map<Integer,Double> map = new HashMap<>();
+                    Map<Integer, Double> map = new HashMap<>();
                     Message message = Message.obtain();
                     message.what = NUMBER_CHANGE;
-                    if(number <= 0){
+                    if (number <= 0) {
                         tv_number.setText("0");
 
-                        map.put(position,0.0);
+                        map.put(position, 0.0);
                         message.obj = map;
                         handler.sendMessage(message);
-                    }else{
+                    } else {
                         tv_number.setText((number - 1) + "");
 
-                        map.put(position,price * (number - 1));
+                        map.put(position, price * (number - 1));
                         message.obj = map;
                         handler.sendMessage(message);
                     }
                 }
             });
         }
+
+    }
+
+    /** 请求服务器 加入购物车*/
+    private void requestHttpForAddCart() {
+        GetInterface request = MyRetrofit.getInstance().request(WebParam.BASE_URL);
+        Map<String,Object> map = new HashMap<>();
+        map.put("username",1);
+        map.put("businessId",1);
+        map.put("goodsId",1);
+        map.put("goodsNumber",1);
+        Call<ResponseByUsually> call = request.addCart("Save.html", map);
+        call.enqueue(new Callback<ResponseByUsually>() {
+            @Override
+            public void onResponse(Call<ResponseByUsually> call, Response<ResponseByUsually> response) {
+                int code = response.body().getCode();
+                if(code == 200){
+                    ToastUtil.show(mContext,"成功添加购物车! 快去购物车查看吧");
+                }else if(code == -100){
+                    ToastUtil.show(mContext,"添加购物车失败!");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseByUsually> call, Throwable t) {
+                ToastUtil.show(mContext,"添加购物车 连接服务器失败!");
+            }
+        });
     }
 
     @Override

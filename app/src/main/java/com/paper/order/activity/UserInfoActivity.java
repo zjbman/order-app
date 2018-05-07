@@ -13,11 +13,9 @@ import com.paper.order.activity.base.BaseActivity;
 import com.paper.order.app.ActivityManager;
 import com.paper.order.config.WebParam;
 import com.paper.order.data.UserData;
-import com.paper.order.page.wo.WoPage;
 import com.paper.order.retrofit.http.MyRetrofit;
 import com.paper.order.retrofit.request.GetInterface;
-import com.paper.order.retrofit.response.ResponseByUser;
-import com.paper.order.retrofit.response.ResponseByUserInfo;
+import com.paper.order.retrofit.response.ResponseByUsually;
 import com.paper.order.util.ToastUtil;
 
 import java.util.HashMap;
@@ -102,22 +100,22 @@ public class UserInfoActivity extends BaseActivity {
         map.put("telephone",telephone);
         map.put("email",email);
         map.put("qq",qq);
-        Call<ResponseByUser> call = request.getManyParam1("Update.html", map);
-        call.enqueue(new Callback<ResponseByUser>() {
+        Call<ResponseByUsually> call = request.getManyParam1("Update.html", map);
+        call.enqueue(new Callback<ResponseByUsually>() {
             @Override
-            public void onResponse(Call<ResponseByUser> call, Response<ResponseByUser> response) {
+            public void onResponse(Call<ResponseByUsually> call, Response<ResponseByUsually> response) {
                 parse(response.body());
             }
 
             @Override
-            public void onFailure(Call<ResponseByUser> call, Throwable t) {
+            public void onFailure(Call<ResponseByUsually> call, Throwable t) {
 
             }
         });
     }
 
 
-    private void parse(ResponseByUser body) {
+    private void parse(ResponseByUsually body) {
         int code = body.getCode();
         if (code == -100) {
             ToastUtil.show(this, body.getMsg());

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -59,6 +60,8 @@ public class WoPage {
     TextView tv_change_password;
     @Bind(R.id.btn_exit)
     Button btn_exit;
+    @Bind(R.id.toolbar)
+    Toolbar toolbar;
 
     private Map<String, String> user;
     private UserData userData;
@@ -93,6 +96,11 @@ public class WoPage {
     private void initView() {
         mView = View.inflate(mContext, R.layout.page_wo, null);
         ButterKnife.bind(this, mView);
+
+        toolbar = mView.findViewById(R.id.toolbar);
+         /* 设定布局中的toolbar*/
+        toolbar.setTitle("点菜系统");
+        toolbar.setTitleTextColor(mContext.getResources().getColor(R.color.white));
 
         user = SharedpreferencesUtil.getInstance().getUser(mContext);
         tv_name.setText(user.get("username") == null ? "未知用户" : user.get("username"));

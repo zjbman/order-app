@@ -22,7 +22,6 @@ import com.paper.order.page.home.adapter.HomeDetailPageAdapter;
 import com.paper.order.retrofit.http.MyRetrofit;
 import com.paper.order.retrofit.request.GetInterface;
 import com.paper.order.retrofit.response.ResponseByBusiness;
-import com.paper.order.util.ImageUtil;
 import com.paper.order.util.ToastUtil;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
@@ -32,7 +31,6 @@ import com.youth.banner.transformer.CubeOutTransformer;
 
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,8 +38,6 @@ import java.util.Map;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by zjbman
@@ -85,6 +81,7 @@ public class HomeDetailPage {
 
                 case REQUEST_SUCCESS:
                     setAdapter();
+                    setListener();
                     break;
                 default:
                     break;
@@ -96,8 +93,6 @@ public class HomeDetailPage {
         mContext = context;
         this.position = position;
         initView();
-//        setAdapter();
-        setListener();
     }
 
 
@@ -146,7 +141,7 @@ public class HomeDetailPage {
 
             @Override
             public void onFailure(Call<ResponseByBusiness> call, Throwable t) {
-                ToastUtil.show(mContext, "请求服务器失败 " + t.getMessage());
+                ToastUtil.show(mContext, "请求服务器失败 ");
             }
         });
     }
@@ -170,7 +165,7 @@ public class HomeDetailPage {
             businessDatas.add(businessData);
         }
 
-        /* 解析完成服务器的数据的时候 就发送消息，handler处理适配器*/
+        /* 解析完成服务器的数据的时候 就发送消息，handler处理适配器和监听点击事件*/
         mHandler.sendEmptyMessage(REQUEST_SUCCESS);
     }
 
@@ -211,7 +206,7 @@ public class HomeDetailPage {
                 @Override
                 public void onListItemClick(View view, int position) {
                     ToastUtil.show(mContext, "list : " + position);
-                    startStoreDetailActivity(position,"","","","");
+//                    startStoreDetailActivity(position,"","","","");
                 }
             });
         }

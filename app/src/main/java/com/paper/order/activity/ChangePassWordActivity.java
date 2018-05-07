@@ -17,7 +17,7 @@ import com.paper.order.config.WebParam;
 import com.paper.order.data.UserData;
 import com.paper.order.retrofit.http.MyRetrofit;
 import com.paper.order.retrofit.request.GetInterface;
-import com.paper.order.retrofit.response.ResponseByUser;
+import com.paper.order.retrofit.response.ResponseByUsually;
 import com.paper.order.util.MD5;
 import com.paper.order.util.StringUtil;
 import com.paper.order.util.ToastUtil;
@@ -118,21 +118,21 @@ public class ChangePassWordActivity extends BaseActivity {
         Map<String, Object> map = new HashMap<>();
         map.put("username", userData.getUsername());
         map.put("newPassword", newPassword);
-        Call<ResponseByUser> call = request.getManyParam1("Change.html", map);
-        call.enqueue(new Callback<ResponseByUser>() {
+        Call<ResponseByUsually> call = request.getManyParam1("Change.html", map);
+        call.enqueue(new Callback<ResponseByUsually>() {
             @Override
-            public void onResponse(Call<ResponseByUser> call, Response<ResponseByUser> response) {
+            public void onResponse(Call<ResponseByUsually> call, Response<ResponseByUsually> response) {
                 parse(response.body());
             }
 
             @Override
-            public void onFailure(Call<ResponseByUser> call, Throwable t) {
+            public void onFailure(Call<ResponseByUsually> call, Throwable t) {
 
             }
         });
     }
 
-    private void parse(ResponseByUser body) {
+    private void parse(ResponseByUsually body) {
         int code = body.getCode();
         if (code == -100) {
             ToastUtil.show(this, body.getMsg());

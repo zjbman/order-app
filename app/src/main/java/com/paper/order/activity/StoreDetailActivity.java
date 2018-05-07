@@ -1,6 +1,7 @@
 package com.paper.order.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -44,7 +45,8 @@ public class StoreDetailActivity extends FragmentActivity {
     ImageView iv_icon;
     @Bind(R.id.tv_business_name)
     TextView tv_business_name;
-
+    @Bind(R.id.tv_exit)
+    TextView tv_exit;
     @Bind(viewpager)
     ViewPager viewPager;
     @Bind(R.id.magicindicator)
@@ -53,7 +55,9 @@ public class StoreDetailActivity extends FragmentActivity {
     private List<String> indicators;
     private List<Fragment> fragments;
 
-    /** 当前商家的id*/
+    /**
+     * 当前商家的id
+     */
     private int businessId;
     private String businessName;
     private String businessPicture;
@@ -100,13 +104,20 @@ public class StoreDetailActivity extends FragmentActivity {
     }
 
     private void setListener() {
+        tv_exit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                StoreDetailActivity.this.startActivity(new Intent(StoreDetailActivity.this,MainActivity.class));
+                ActivityManager.getInstance().removeActivity(StoreDetailActivity.this);
+            }
+        });
     }
 
     private void initFragment() {
         fragments = new ArrayList<>();
-        fragments.add(new GoodsFragment(this,businessId));
-        fragments.add(new CommentFragment(this,businessId));
-        fragments.add(new StoreInfoFragment(this,businessId,businessAddress,businessTelephone));
+        fragments.add(new GoodsFragment(this, businessId));
+        fragments.add(new CommentFragment(this, businessId));
+        fragments.add(new StoreInfoFragment(this, businessId, businessAddress, businessTelephone));
     }
 
     private void setAdapter() {

@@ -1,11 +1,7 @@
 package com.paper.order.retrofit.http;
 
 import com.paper.order.retrofit.request.GetInterface;
-import com.paper.order.retrofit.response.ResponseByUser;
 
-import java.util.Map;
-
-import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 

@@ -33,7 +33,7 @@
             android:id="@+id/tv_goods_number"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="3"
+            android:text="0"
             android:textColor="#000"
             android:textSize="15sp" />
 
@@ -41,7 +41,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
-            android:text=" 个商品"
+            android:text=" 个"
             android:textColor="#000"
             android:textSize="15sp" />
 
@@ -61,7 +61,7 @@
             android:id="@+id/tv_accounts"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="20"
+            android:text="0.0"
             android:textColor="@color/textColorRed"
             android:textSize="18sp" />
 

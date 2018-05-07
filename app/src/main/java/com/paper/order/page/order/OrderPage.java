@@ -1,11 +1,13 @@
 package com.paper.order.page.order;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.paper.order.R;
@@ -25,9 +27,12 @@ public class OrderPage {
     private RecyclerView rv_finish;
     private OrderPageAdapter adapter;
 
+    private Toolbar toolbar;
+
     private final int REFRESH_SUCCESS = 0;
     private final int REFRESH_FAIL = 1;
 
+    @SuppressLint("HandlerLeak")
     private Handler mHandler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -85,6 +90,12 @@ public class OrderPage {
         rv_delivering = mView.findViewById(R.id.rv_delivering);
         rv_finish =  mView.findViewById(R.id.rv_finish);
         swipeRefreshLayout =  mView.findViewById(R.id.swipeRefreshLayout);
+        toolbar = mView.findViewById(R.id.toolbar);
+
+         /* 设定布局中的toolbar*/
+        toolbar.setTitle("点菜系统");
+        toolbar.setTitleTextColor(mContext.getResources().getColor(R.color.white));
+
     }
 
     public View getView(){

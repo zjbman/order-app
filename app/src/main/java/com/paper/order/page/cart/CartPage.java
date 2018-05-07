@@ -1,11 +1,13 @@
 package com.paper.order.page.cart;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.paper.order.R;
@@ -23,6 +25,7 @@ import butterknife.ButterKnife;
 public class CartPage {
     private Context mContext;
     private View mView;
+    private Toolbar toolbar;
 
     private CartPageAdapter adapter;
 
@@ -34,6 +37,7 @@ public class CartPage {
     private final int REFRESH_SUCCESS = 0;
     private final int REFRESH_FAIL = 1;
 
+    @SuppressLint("HandlerLeak")
     private Handler mHandler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -87,6 +91,12 @@ public class CartPage {
     private void initView() {
         mView = View.inflate(mContext, R.layout.page_cart,null);
         ButterKnife.bind(this,mView);
+
+        toolbar = mView.findViewById(R.id.toolbar);
+
+         /* 设定布局中的toolbar*/
+        toolbar.setTitle("点菜系统");
+        toolbar.setTitleTextColor(mContext.getResources().getColor(R.color.white));
     }
 
     public View getView(){

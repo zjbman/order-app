@@ -15,7 +15,9 @@ import com.paper.order.R;
 import com.paper.order.config.WebParam;
 import com.paper.order.data.GoodsData;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -29,9 +31,19 @@ public class GoodsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private Context mContext;
     private List<GoodsData> goodsDatas;
 
-    public GoodsAdapter(Context context,List<GoodsData> goodsDatas){
+    /** 这是记录当前每一个item有多少数量的map*/
+    private Map<Integer,Integer> numberMap = new HashMap<>();
+
+    public GoodsAdapter(Context context, List<GoodsData> goodsDatas,Map<Integer,Integer> numberMap){
         mContext = context;
         this.goodsDatas = goodsDatas;
+        this.numberMap = numberMap;
+    }
+
+    public void notify(Map<Integer,Integer> numberMap){
+        this.numberMap = numberMap;
+        /*刷新适配器*/
+        notifyDataSetChanged();
     }
 
     @Override
@@ -92,7 +104,13 @@ public class GoodsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     .override(800, 800)
                     .into(iv_icon);
 
-            tv_number.setText("0");
+//            tv_number.setText("0");
+
+            if(numberMap.containsKey(position)){
+                tv_number.setText(numberMap.get(position) + "");
+            }else{
+                tv_number.setText("0");
+            }
 
             /* 减号*/
             btn_decrease.setOnClickListener(new View.OnClickListener() {
@@ -109,7 +127,7 @@ public class GoodsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 @Override
                 public void onClick(View view) {
                     if(onBtnAddClickListener != null){
-                        onBtnDecreaseClickListener.onClick(position,tv_number,goodsData.getPrice());
+                        onBtnAddClickListener.onClick(position,tv_number,goodsData.getPrice());
                     }
                 }
             });
