@@ -39,9 +39,17 @@ public class ResponseByCart {
         private Integer id;
         private String name;
         private String username;
+        private Integer businessId;
         private String businessName;
         private List<GoodsData> goodsDataList;
 
+        public Integer getBusinessId() {
+            return businessId;
+        }
+
+        public void setBusinessId(Integer businessId) {
+            this.businessId = businessId;
+        }
 
         public Integer getId() {
             return id;

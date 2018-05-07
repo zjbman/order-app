@@ -16,10 +16,10 @@
         card_view:cardElevation="10dp">
 
         <LinearLayout
-            android:focusable="true"
-            android:focusableInTouchMode="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:orientation="horizontal">
 
             <EditText
@@ -30,8 +30,8 @@
                 android:layout_weight="1"
                 android:ellipsize="middle"
                 android:enabled="false"
-                android:hint="请选择收货地址"
-                android:maxLines="1" />
+                android:hint="请填写收货地址"
+                android:singleLine="true" />
 
 
             <ImageView
@@ -56,12 +56,12 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="vertical">
 
 
@@ -90,10 +90,10 @@
                 </LinearLayout>
 
                 <View
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
                     android:background="#f57c00" />
 
                 <android.support.v7.widget.RecyclerView
@@ -140,10 +140,10 @@
                 </LinearLayout>
 
                 <View
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
                     android:background="#f57c00" />
 
                 <LinearLayout
@@ -184,79 +184,81 @@
                 </LinearLayout>
 
                 <View
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="#f57c00" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:padding="8dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="8dp"
-                        android:layout_weight="1"
-                        android:text="支付方式"
-                        android:textColor="#000"
-                        android:textSize="16sp" />
-
-                    <TextView
-                        android:id="@+id/tv_pay_way"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginRight="8dp"
-                        android:text="在线支付"
-                        android:textColor="#000"
-                        android:textSize="18sp" />
-
-                </LinearLayout>
-
-                <View
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
                     android:background="#f57c00" />
 
-                <LinearLayout
+                <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:gravity="center_vertical"-->
+                <!--android:orientation="horizontal"-->
+                <!--android:padding="8dp">-->
+
+                <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginLeft="8dp"-->
+                <!--android:layout_weight="1"-->
+                <!--android:text="支付方式"-->
+                <!--android:textColor="#000"-->
+                <!--android:textSize="16sp" />-->
+
+                <!--<TextView-->
+                <!--android:id="@+id/tv_pay_way"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginLeft="8dp"-->
+                <!--android:layout_marginRight="8dp"-->
+                <!--android:text="在线支付"-->
+                <!--android:textColor="#000"-->
+                <!--android:textSize="18sp" />-->
+
+                <!--</LinearLayout>-->
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/tl_telephone"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:padding="8dp">
+                    android:layout_height="45dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    >
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <EditText
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="8dp"
-                        android:layout_weight="1"
-                        android:text="备注"
-                        android:textColor="#000"
-                        android:textSize="16sp" />
+                        android:hint="填写手机号码"
+                        android:maxLength="25"
+                        android:maxLines="1"
+                         />
+                </android.support.design.widget.TextInputLayout>
 
-                    <TextView
-                        android:id="@+id/tv_remarks"
-                        android:layout_width="wrap_content"
+
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/tl_remark"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    >
+
+                    <EditText
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginRight="8dp"
-                        android:drawablePadding="5dp"
-                        android:drawableRight="@drawable/left"
-                        android:text="口味、偏好等要求"
-                        android:textColor="#77000000"
-                        android:textSize="15sp" />
+                        android:hint=" 备注  :   口味、偏好等要求"
+                        android:maxLength="25"
+                        android:maxLines="1"
+                        />
+                </android.support.design.widget.TextInputLayout>
 
-                </LinearLayout>
+
             </LinearLayout>
 
         </ScrollView>
+
     </android.support.v7.widget.CardView>
 
     <View

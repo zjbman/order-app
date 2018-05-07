@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.paper.order.R;
 import com.paper.order.activity.LoginActivity;
+import com.paper.order.activity.OrderSubmitActivity;
 import com.paper.order.adapter.GoodsAdapter;
 import com.paper.order.config.WebParam;
 import com.paper.order.data.CartData;
@@ -346,7 +347,7 @@ public class CartPage {
                     if (numberMap.keySet().size() <= 0) {
                         ToastUtil.show(mContext, "未选择任何商品");
                     } else {
-                        openDialog();
+                        startOrderSumbitActivity();
                     }
                 }
             });
@@ -354,24 +355,19 @@ public class CartPage {
 
     }
 
-    private void openDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-        builder.setTitle("提示");
-        builder.setMessage("确定下单吗？");
-        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
+    private void startOrderSumbitActivity() {
+        Set<Integer> keySet = numberMap.keySet();
+        Map<Integer,Integer> map = new HashMap<>();
+        for(Integer key : keySet){
+            CartOneData cartOneData = cartOneDataList.get(key);
+            Integer businessId = cartOneData.getBusinessId();
 
-        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                ToastUtil.show(mContext, "下单成功！");
-            }
-        });
+            Integer goodsId = cartOneData.getGoodsId();
+            Integer number = cartOneData.getNumber();
+        }
 
-        builder.create().show();
+        Intent intent = new Intent(mContext, OrderSubmitActivity.class);
+        mContext.startActivity(intent);
     }
+
 }

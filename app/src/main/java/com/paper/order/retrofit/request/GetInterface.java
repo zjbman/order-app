@@ -4,6 +4,7 @@ import com.paper.order.retrofit.response.ResponseByBusiness;
 import com.paper.order.retrofit.response.ResponseByCart;
 import com.paper.order.retrofit.response.ResponseByComment;
 import com.paper.order.retrofit.response.ResponseByGoods;
+import com.paper.order.retrofit.response.ResponseByOrder;
 import com.paper.order.retrofit.response.ResponseByUsually;
 import com.paper.order.retrofit.response.ResponseByUserInfo;
 
@@ -71,5 +72,13 @@ public interface  GetInterface {
     @FormUrlEncoded
     @POST("cart/Save.html")
     Call<ResponseByUsually> addCartPost(@FieldMap Map<String, Object> params);
+
+    /** 新增订单*/
+    @GET("order/{api}")
+    Call<ResponseByUsually> addOrder(@Path("api")String api, @QueryMap Map<String, Object> params);
+
+    /** 订单*/
+    @GET("order/{api}")
+    Call<ResponseByOrder> getOrder(@Path("api")String api, @QueryMap Map<String, Object> params);
 
 }

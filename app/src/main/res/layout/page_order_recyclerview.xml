@@ -60,7 +60,7 @@
             android:layout_gravity="center_vertical"
             android:background="@drawable/btn"
             android:gravity="center"
-            android:text="再来一单"
+            android:text="再次光临"
             android:textColor="@color/textColorRed"
             android:textSize="13sp" />
     </LinearLayout>

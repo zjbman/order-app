@@ -26,7 +26,6 @@
         <activity android:name=".activity.WelcomeActivity" />
         <activity android:name=".activity.StoreDetailActivity" />
         <activity android:name=".activity.OrderSubmitActivity" />
-        <activity android:name=".activity.AddressManageActivity" />
         <activity android:name=".activity.UserInfoActivity" />
         <activity android:name=".activity.LoginActivity" />
         <activity android:name=".activity.RegisterActivity" />

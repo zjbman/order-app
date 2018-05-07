@@ -2,6 +2,7 @@ package com.paper.order.fragment;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.paper.order.R;
+import com.paper.order.activity.MainActivity;
 import com.paper.order.adapter.GoodsAdapter;
 import com.paper.order.config.WebParam;
 import com.paper.order.data.GoodsData;
@@ -314,6 +316,7 @@ public class GoodsFragment extends Fragment {
                     int code = response.body().getCode();
                     if (code == 200) {
                         ToastUtil.show(mContext, "成功添加购物车! 快去购物车查看吧");
+                        startActivity(new Intent(mContext, MainActivity.class));
                     } else if (code == -100) {
                         ToastUtil.show(mContext, "添加购物车失败! code == -100");
                     }

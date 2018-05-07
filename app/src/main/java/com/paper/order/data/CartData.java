@@ -13,6 +13,7 @@ public class CartData {
     private Integer id;
     private String name;
     private String username;
+    private Integer businessId;
     private String businessName;
     private List<GoodsData> goodsDataList;
 
@@ -20,6 +21,7 @@ public class CartData {
         id = msg.getId();
         name = msg.getName();
         username = msg.getUsername();
+        businessId = msg.getBusinessId();
         businessName = msg.getBusinessName();
 
         goodsDataList = new ArrayList<>();
@@ -35,6 +37,14 @@ public class CartData {
 
             goodsDataList.add(goodsData);
         }
+    }
+
+    public Integer getBusinessId() {
+        return businessId;
+    }
+
+    public void setBusinessId(Integer businessId) {
+        this.businessId = businessId;
     }
 
     public Integer getId() {

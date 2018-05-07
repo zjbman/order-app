@@ -8,6 +8,7 @@ public class CartOneData {
     private Integer id;
     private String name;
     private String username;
+    private Integer businessId;
     private String businessName;
     private Integer goodsId;
     private String goodsName;
@@ -15,6 +16,14 @@ public class CartOneData {
     private String picture;
     private Integer number;
     private Double price;
+
+    public Integer getBusinessId() {
+        return businessId;
+    }
+
+    public void setBusinessId(Integer businessId) {
+        this.businessId = businessId;
+    }
 
     public Integer getId() {
         return id;

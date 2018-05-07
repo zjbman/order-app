@@ -8,7 +8,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.paper.order.R;
+import com.paper.order.config.WebParam;
+import com.paper.order.data.OrderData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,21 +27,13 @@ import butterknife.ButterKnife;
 
 public class OrderPageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context mContext;
-    private OnRecyclerViewItemClickListener onRecyclerViewItemClickListener;
-    private List<String> data;
+    private List<OrderData> orderDataList;
+    private OnAgainButtonClickListener onAgainButtonClickListener;
 
-    public OrderPageAdapter(Context context){
+    public OrderPageAdapter(Context context,List<OrderData> orderDataList){
         mContext = context;
-        initData();
+        this.orderDataList = orderDataList;
     }
-
-    private void initData() {
-        data = new ArrayList<>();
-        for(int i = 0;i < 4;i++){
-            data.add("商品" + i);
-        }
-    }
-
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -53,11 +49,12 @@ public class OrderPageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     @Override
     public int getItemCount() {
-        return data.size();
+        return orderDataList.size();
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder{
         private View itemView;
+
         @Bind(R.id.iv_icon)
         ImageView iv_icon;
         @Bind(R.id.tv_title)
@@ -77,24 +74,34 @@ public class OrderPageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         }
 
         public void setData(final int position){
-            tv_title.setText(data.get(position));
+            OrderData orderData = orderDataList.get(position);
+            Glide.with(mContext).load(WebParam.PIC_BASE_URL + orderData.getBusinessPicture())
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .placeholder(R.mipmap.icon)//加载时的图片
+                    .error(R.mipmap.icon)  //加载错误时的图片
+                    .override(800, 800)
+                    .into(iv_icon);
+            tv_title.setText(orderData.getBusinessName());
+            tv_date.setText(orderData.getDate());
+            tv_total_price.setText(orderData.getPrice() + "");
 
-            itemView.setOnClickListener(new View.OnClickListener() {
+
+            btn_again.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(onRecyclerViewItemClickListener != null){
-                        onRecyclerViewItemClickListener.onItemClick(position,itemView);
+                    if(onAgainButtonClickListener != null){
+                        onAgainButtonClickListener.onClick(position);
                     }
                 }
             });
         }
     }
 
-    public void setOnRecyclerViewItemClickListener(OnRecyclerViewItemClickListener listener){
-        onRecyclerViewItemClickListener = listener;
+    public void setOnAgainButtonClickListener(OnAgainButtonClickListener onAgainButtonClickListener){
+        this.onAgainButtonClickListener = onAgainButtonClickListener;
     }
 
-    public interface OnRecyclerViewItemClickListener{
-        void onItemClick(int position,View itemView);
+    public interface OnAgainButtonClickListener{
+        void onClick(int position);
     }
 }
