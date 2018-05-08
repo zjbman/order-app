@@ -10,6 +10,8 @@ import android.os.Message;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -17,15 +19,23 @@ import android.widget.TextView;
 import com.paper.order.R;
 import com.paper.order.activity.base.BaseActivity;
 import com.paper.order.adapter.OrderSubmitAdapter;
+import com.paper.order.app.ActivityManager;
 import com.paper.order.config.WebParam;
+import com.paper.order.data.GoodsData;
+import com.paper.order.data.GoodsDataForOrderSubmit;
 import com.paper.order.data.UserData;
 import com.paper.order.retrofit.http.MyRetrofit;
 import com.paper.order.retrofit.request.GetInterface;
+import com.paper.order.retrofit.response.ResponseByGoods;
 import com.paper.order.retrofit.response.ResponseByUserInfo;
 import com.paper.order.retrofit.response.ResponseByUsually;
 import com.paper.order.util.SharedpreferencesUtil;
 import com.paper.order.util.StringUtil;
 import com.paper.order.util.ToastUtil;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -50,10 +60,17 @@ public class OrderSubmitActivity extends BaseActivity {
     TextInputLayout tl_remark;
     @Bind(R.id.tl_telephone)
     TextInputLayout tl_telephone;
+    @Bind(R.id.toolbar)
+    Toolbar toolbar;
 
     private UserData userData;
+    private String  goodsList;
+    private List<GoodsData> goodsDatas;
+    private List<GoodsDataForOrderSubmit> GoodsDataForOrderSubmitList;
 
     private final int REQUEST_USER_SUCCESS = 0;
+    private final int REQUEST_GOODS_SUCCESS = 1;
+    private final int DATA_OK = 2;
 
     @SuppressLint("HandlerLeak")
     private Handler handler = new Handler() {
@@ -71,6 +88,13 @@ public class OrderSubmitActivity extends BaseActivity {
                     }
                     break;
 
+                case REQUEST_GOODS_SUCCESS:
+//                    setAdapter();
+                    break;
+
+                case DATA_OK:
+                    tv_accounts.setText((11 + totalMoney) + "");
+                    break;
                 default:
                     break;
             }
@@ -89,20 +113,112 @@ public class OrderSubmitActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-        getIntent();
-        setAdapter();
+          /* 设定布局中的toolbar*/
+        toolbar.setTitle("提交订单");
+        toolbar.setTitleTextColor(getResources().getColor(R.color.white));
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);// 给左上角图标的左边加上一个返回的图标
 
+        goodsList = getIntent().getStringExtra("goodsList");
+        parseGoodsList();
+//        requestHttpForGoods();
+        setAdapter();
+    }
+
+    private Double totalMoney = 0.0;
+
+    private void parseGoodsList() {
+        JSONArray jsonArray = null;
+        try {
+            GoodsDataForOrderSubmitList = new ArrayList<>();
+            jsonArray = new JSONArray(goodsList);
+            for(int i = 0;i < jsonArray.length();i++){
+                GoodsDataForOrderSubmit goodsDataForOrderSubmit = new GoodsDataForOrderSubmit();
+                JSONObject jsonObject = (JSONObject) jsonArray.get(i);
+
+                int businessId = jsonObject.getInt("businessId");
+                int goodsId = jsonObject.getInt("goodsId");
+                int goodsNumber = jsonObject.getInt("goodsNumber");
+                Double price = jsonObject.getDouble("price");
+                String businessName = jsonObject.getString("businessName");
+                String businessPicture = jsonObject.getString("businessPicture");
+                String goodsName = jsonObject.getString("goodsName");
+
+                goodsDataForOrderSubmit.setBusinessId(businessId);
+                goodsDataForOrderSubmit.setGoodsId(goodsId);
+                goodsDataForOrderSubmit.setGoodsNumber(goodsNumber);
+                goodsDataForOrderSubmit.setPrice(price);
+                goodsDataForOrderSubmit.setBusinessName(businessName);
+                goodsDataForOrderSubmit.setBusinessPicture(businessPicture);
+                goodsDataForOrderSubmit.setGoodsName(goodsName);
+
+                GoodsDataForOrderSubmitList.add(goodsDataForOrderSubmit);
+
+                totalMoney = totalMoney + (goodsNumber * price);
+            }
+
+            handler.sendEmptyMessage(DATA_OK);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void requestHttpForGoods() {
+        JSONArray jsonArray = null;
+        try {
+            jsonArray = new JSONArray(goodsList);
+            StringBuilder businessIdStr = new StringBuilder();
+            for(int i = 0;i < jsonArray.length();i++){
+                JSONObject jsonObject = (JSONObject) jsonArray.get(i);
+                int businessId = jsonObject.getInt("businessId");
+                businessIdStr.append(businessId);
+
+                if(i != jsonArray.length() - 1){
+                    businessIdStr.append(",");
+                }
+            }
+
+            GetInterface request = MyRetrofit.getInstance().request(WebParam.BASE_URL);
+            Map<String,Object> map = new HashMap<>();
+            map.put("ids",businessIdStr.toString());
+            Call<ResponseByGoods> call = request.getGoods("GetMany.html", map);
+            call.enqueue(new Callback<ResponseByGoods>() {
+                @Override
+                public void onResponse(Call<ResponseByGoods> call, Response<ResponseByGoods> response) {
+                    if(response.body() == null){
+                        ToastUtil.show(OrderSubmitActivity.this,"body() == null");
+                    }else{
+                        int code = response.body().getCode();
+                        if(code == -100){
+                            ToastUtil.show(OrderSubmitActivity.this,"code == -100");
+                        }else if(code == 200){
+                            parse(response.body().getMsg());
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ResponseByGoods> call, Throwable t) {
+                    ToastUtil.show(OrderSubmitActivity.this,"连接失败");
+                }
+            });
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void parse(List<ResponseByGoods.Msg> msgs) {
+        goodsDatas = new ArrayList<>();
+        for (ResponseByGoods.Msg msg : msgs) {
+            goodsDatas.add(new GoodsData(msg));
+        }
+
+        handler.sendEmptyMessage(REQUEST_GOODS_SUCCESS);
     }
 
     private void setAdapter() {
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-
-        List<String> titles = new ArrayList<>();
-        for (int i = 0; i < 2; i++) {
-            titles.add("" + i);
-        }
-
-        OrderSubmitAdapter adapter = new OrderSubmitAdapter(this, titles);
+        OrderSubmitAdapter adapter = new OrderSubmitAdapter(this, GoodsDataForOrderSubmitList);
         recyclerView.setAdapter(adapter);
     }
 
@@ -194,11 +310,9 @@ public class OrderSubmitActivity extends BaseActivity {
         map.put("address", et_address.getText().toString());
         map.put("telephone", tl_telephone.getEditText().getText().toString());
         map.put("remark", tl_remark.getEditText().getText().toString());
-
-        map.put("businessId","" );
-        map.put("goodsList", "");
-
+        map.put("goodsList", goodsList);//json数组格式，包含businessId，goodsId，goodsNumber 三个字段
         map.put("price", Double.parseDouble(tv_accounts.getText().toString()));
+
         Call<ResponseByUsually> call = request.addOrder("Save.html", map);
         call.enqueue(new Callback<ResponseByUsually>() {
             @Override
@@ -232,6 +346,25 @@ public class OrderSubmitActivity extends BaseActivity {
     @Override
     protected void onRelease() {
 
+    }
+
+
+    /* 要点：toolbar的点击监听分为了两个部分，
+     一个是它左边的图标（这是系统自动生成的，如果它前面还有activity，图标是<—，id是系统分配的android.R.id.home） ；
+     另一个是它右边的文字（这个是我们自定义的菜单所有的）
+     左边的点击事件通过下面的方式 */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+             /* 点击toolbar 返回主界面*/
+            case android.R.id.home:
+                Intent intent = new Intent(this, MainActivity.class);
+                intent.putExtra("position",3);
+                startActivity(intent);
+                ActivityManager.getInstance().removeActivity(this);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 }

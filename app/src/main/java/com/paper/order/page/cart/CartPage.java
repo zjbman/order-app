@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.paper.order.R;
 import com.paper.order.activity.LoginActivity;
+import com.paper.order.activity.MainActivity;
 import com.paper.order.activity.OrderSubmitActivity;
 import com.paper.order.adapter.GoodsAdapter;
 import com.paper.order.config.WebParam;
@@ -27,6 +28,10 @@ import com.paper.order.retrofit.request.GetInterface;
 import com.paper.order.retrofit.response.ResponseByCart;
 import com.paper.order.util.SharedpreferencesUtil;
 import com.paper.order.util.ToastUtil;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -92,6 +97,7 @@ public class CartPage {
             switch (msg.what) {
                 case REFRESH_SUCCESS:
                     ToastUtil.show(mContext, "刷新成功");
+//                    setAdapter(true);
                     swipeRefreshLayout.setRefreshing(false);
                     break;
 
@@ -101,7 +107,7 @@ public class CartPage {
                     break;
 
                 case REQUEST_SUCCESS:
-                    setAdapter();
+                    setAdapter(false);
                     setListener();
                     break;
 
@@ -143,7 +149,7 @@ public class CartPage {
     public CartPage(Context context) {
         mContext = context;
         initView();
-        requestHttp();
+        requestHttp(false);
     }
 
     private void initView() {
@@ -162,7 +168,7 @@ public class CartPage {
     }
 
 
-    private void requestHttp() {
+    private void requestHttp(final boolean isRefresh) {
         GetInterface request = MyRetrofit.getInstance().request(WebParam.BASE_URL);
         Map<String, String> user = SharedpreferencesUtil.getInstance().getUser(mContext);
         String username = user.get("username");
@@ -180,7 +186,7 @@ public class CartPage {
                     if (code == -100) {
                         ToastUtil.show(mContext, "请求购物车信息失败！ code == -100");
                     } else if (code == 200) {
-                        parse(response.body().getMsg());
+                        parse(response.body().getMsg(),isRefresh);
                     }
                 }
             }
@@ -192,25 +198,34 @@ public class CartPage {
         });
     }
 
-    private void parse(List<ResponseByCart.Msg> msgs) {
+    private void parse(List<ResponseByCart.Msg> msgs,boolean isRefresh) {
         cartDataList = new ArrayList<>();
         for (ResponseByCart.Msg msg : msgs) {
             cartDataList.add(new CartData(msg));
         }
-        mHandler.sendEmptyMessage(REQUEST_SUCCESS);
+
+        if(isRefresh){
+            mHandler.sendEmptyMessage(REFRESH_SUCCESS);
+        }else{
+            mHandler.sendEmptyMessage(REQUEST_SUCCESS);
+        }
     }
 
 
-    private void setAdapter() {
+    private void setAdapter(boolean isRefresh) {
         if (cartDataList != null && cartDataList.size() > 0) {
             parseCartDataListToCartOneDataList();
-
+            if(isRefresh){
+                adapter.notifyCartDataList(cartOneDataList);
+                adapter.notifyDataSetChanged();
+            }else{
             /* 这里的numberMap 与商品列表中的numberMap是不同的，它是有初始值的，所以应该先给它赋值*/
-            //如何赋值？？ 不想写了，累， 就先这样吧
+                //如何赋值？？ 不想写了，累， 就先这样吧
 
-            adapter = new CartPageAdapter(mContext, cartOneDataList, numberMap);
-            recyclerView.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
-            recyclerView.setAdapter(adapter);
+                adapter = new CartPageAdapter(mContext, cartOneDataList, numberMap);
+                recyclerView.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
+                recyclerView.setAdapter(adapter);
+            }
         }
     }
 
@@ -224,6 +239,7 @@ public class CartPage {
             for (CartData.GoodsData data : goodsDataList) {
                 CartOneData cartOneData = new CartOneData();
                 cartOneData.setBusinessName(cartData.getBusinessName());
+                cartOneData.setBusinessId(cartData.getBusinessId());
                 cartOneData.setId(cartData.getId());
                 cartOneData.setName(cartData.getName());
                 cartOneData.setUsername(cartData.getUsername());
@@ -244,7 +260,11 @@ public class CartPage {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mHandler.sendEmptyMessageAtTime(REFRESH_SUCCESS, 1500);
+//                requestHttp(true);
+                Intent intent = new Intent(mContext, MainActivity.class);
+                intent.putExtra("position",3);
+                mHandler.sendEmptyMessage(REFRESH_SUCCESS);
+                mContext.startActivity(intent);
             }
         });
 
@@ -357,16 +377,37 @@ public class CartPage {
 
     private void startOrderSumbitActivity() {
         Set<Integer> keySet = numberMap.keySet();
-        Map<Integer,Integer> map = new HashMap<>();
-        for(Integer key : keySet){
-            CartOneData cartOneData = cartOneDataList.get(key);
-            Integer businessId = cartOneData.getBusinessId();
+        JSONArray jsonArray = new JSONArray();
 
+        for(Integer key : keySet){
+            JSONObject jsonObject = new JSONObject();
+            CartOneData cartOneData = cartOneDataList.get(key);
+
+            Integer businessId = cartOneData.getBusinessId();
             Integer goodsId = cartOneData.getGoodsId();
-            Integer number = cartOneData.getNumber();
+            String goodsName = cartOneData.getGoodsName();
+            Integer goodsNumber = numberMap.get(key);
+            String businessName = cartOneData.getBusinessName();
+            String businessPicture = cartOneData.getPicture();
+            Double price = cartOneData.getPrice();
+            try {
+                jsonObject.put("businessId",businessId);
+                jsonObject.put("goodsId",goodsId);
+                jsonObject.put("goodsName",goodsName);
+                jsonObject.put("goodsNumber",goodsNumber);
+                jsonObject.put("businessName",businessName);
+                jsonObject.put("businessPicture",businessPicture);
+                jsonObject.put("price",price);
+
+                jsonArray.put(jsonObject);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
 
         Intent intent = new Intent(mContext, OrderSubmitActivity.class);
+        intent.putExtra("goodsList",jsonArray.toString());
         mContext.startActivity(intent);
     }
 

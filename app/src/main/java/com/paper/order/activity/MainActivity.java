@@ -74,7 +74,7 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected View setContentView() {
-        return View.inflate(this,R.layout.activity_main,null);
+        return View.inflate(this, R.layout.activity_main, null);
     }
 
     @Override
@@ -84,6 +84,7 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void initView() {
+
         startCheckNetService();
         initPage();
 
@@ -105,7 +106,36 @@ public class MainActivity extends BaseActivity {
             e.printStackTrace();
         }
         frameLayout.removeAllViews();
-        frameLayout.addView(homePageView);
+//        frameLayout.addView(homePageView);
+
+        startWhichPage();
+    }
+
+    /**
+     * 其他页面打开MainActivity时显示的page,M默认打开第一个page
+     */
+    private void startWhichPage() {
+        int position = getIntent().getIntExtra("position", 1);
+        switch (position) {
+            case 1:
+                frameLayout.addView(homePageView);
+                radioGroup.check(R.id.guide_home);
+                break;
+            case 2:
+                frameLayout.addView(orderPageView);
+                radioGroup.check(R.id.guide_order);
+                break;
+            case 3:
+                frameLayout.addView(cartPageView);
+                radioGroup.check(R.id.guide_cart);
+                break;
+            case 4:
+                frameLayout.addView(woPageView);
+                radioGroup.check(R.id.guide_wo);
+                break;
+            default:
+                break;
+        }
     }
 
 

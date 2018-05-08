@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.paper.order.R;
+import com.paper.order.activity.MainActivity;
 import com.paper.order.activity.StoreDetailActivity;
 import com.paper.order.config.WebParam;
 import com.paper.order.data.OrderData;
@@ -80,7 +81,7 @@ public class OrderPage {
     public OrderPage(Context context){
         mContext = context;
         initView();
-        requestHttp();
+        requestHttp(false);
     }
 
 
@@ -100,7 +101,7 @@ public class OrderPage {
         return mView;
     }
 
-    private void requestHttp() {
+    private void requestHttp(final boolean isRefresh) {
         GetInterface request = MyRetrofit.getInstance().request(WebParam.BASE_URL);
         Map<String, String> user = SharedpreferencesUtil.getInstance().getUser(mContext);
         String username = user.get("username");
@@ -118,8 +119,9 @@ public class OrderPage {
                     if (code == -100) {
                         ToastUtil.show(mContext, "查询订单失败！ code == -100 ");
                     } else if (code == 200) {
-                        parse(response.body().getMsg());
-
+                        parse(response.body().getMsg(),isRefresh);
+                    }else if (code == 101){
+//                        ToastUtil.show(mContext, "当前用户无订单");
                     }
                 }
             }
@@ -131,15 +133,19 @@ public class OrderPage {
         });
     }
 
-    private void parse(List<ResponseByOrder.Msg> msgs) {
+    private void parse(List<ResponseByOrder.Msg> msgs,boolean isRefresh) {
         orderDataList = new ArrayList<>();
 
         for(ResponseByOrder.Msg msg : msgs){
             orderDataList.add(new OrderData(msg));
         }
 
-        ToastUtil.show(mContext, "查询订单成功！");
+//        ToastUtil.show(mContext, "查询订单成功！");
         mHandler.sendEmptyMessage(REQUEST_SUCCESS);
+
+        if(isRefresh){
+            mHandler.sendEmptyMessage(REFRESH_SUCCESS);
+        }
     }
 
 
@@ -155,7 +161,11 @@ public class OrderPage {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mHandler.sendEmptyMessageAtTime(REFRESH_SUCCESS,1500);
+//                requestHttp(true);
+                Intent intent = new Intent(mContext, MainActivity.class);
+                intent.putExtra("position",2);
+                mHandler.sendEmptyMessage(REFRESH_SUCCESS);
+                mContext.startActivity(intent);
             }
         });
 

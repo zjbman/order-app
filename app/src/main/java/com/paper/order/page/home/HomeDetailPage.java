@@ -108,7 +108,7 @@ public class HomeDetailPage {
         mBanner.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, MyApplication.ScreenHeight / 4));
 
         /* 请求服务器，返回所有商家信息*/
-        requestHttp();
+        requestHttp(false);
     }
 
     private void setAdapter() {
@@ -125,7 +125,7 @@ public class HomeDetailPage {
     }
 
 
-    private void requestHttp() {
+    private void requestHttp(final boolean isRefresh) {
         Map<String, Object> map = new HashMap<>();
         map.put("index", position);
         GetInterface request = MyRetrofit.getInstance().request(WebParam.BASE_URL);
@@ -135,7 +135,7 @@ public class HomeDetailPage {
             @Override
             public void onResponse(Call<ResponseByBusiness> call, Response<ResponseByBusiness> response) {
                 if (response.body() != null) {
-                    parse(response.body());
+                    parse(response.body(),isRefresh);
                 }
             }
 
@@ -152,7 +152,7 @@ public class HomeDetailPage {
      * @param body
      * @return
      */
-    private void parse(ResponseByBusiness body) {
+    private void parse(ResponseByBusiness body,boolean isRefresh) {
         List<ResponseByBusiness.Msg> msgs = body.getMsg();
         businessDatas = new ArrayList<>();
 
@@ -168,6 +168,10 @@ public class HomeDetailPage {
 
         /* 解析完成服务器的数据的时候 就发送消息，handler处理适配器和监听点击事件*/
         mHandler.sendEmptyMessage(REQUEST_SUCCESS);
+
+        if(isRefresh){
+            mHandler.sendEmptyMessage(REFRESH_SUCCESS);
+        }
     }
 
     private void startBanner() {
@@ -228,7 +232,7 @@ public class HomeDetailPage {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mHandler.sendEmptyMessageDelayed(REFRESH_SUCCESS, 1500);
+                requestHttp(true);
             }
         });
 

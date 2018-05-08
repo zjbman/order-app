@@ -141,7 +141,9 @@ public class UserInfoActivity extends BaseActivity {
         switch (item.getItemId()) {
              /* 点击toolbar 返回主界面*/
             case android.R.id.home:
-                startActivity(new Intent(this, MainActivity.class));
+                Intent intent = new Intent(this, MainActivity.class);
+                intent.putExtra("position",4);
+                startActivity(intent);
                 ActivityManager.getInstance().removeActivity(this);
                 return true;
         }
